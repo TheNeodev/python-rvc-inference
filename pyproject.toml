@@ -22,7 +22,7 @@ dependencies = [
     "pydub==0.25.1",              # Exact version 0.25.1
     "einops",                     # No version specified
     "local_attention",            # No version specified
-    "torchcrepe==0.0.20",         # Exact version 0.0.20
+    "torchcrepe==0.0.23",         # Exact version 0.0.20
     "torchfcpe",                  # No version specified
     "audio-separator==0.25.0",    # GPU-optimized package (corrected version)
     "yt-dlp",                     # No version specified
