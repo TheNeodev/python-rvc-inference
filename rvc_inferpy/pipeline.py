@@ -29,8 +29,8 @@ input_audio_path2wav = {}
 import torchcrepe  # Fork Feature. Crepe algo for training and preprocess
 from torchfcpe import spawn_bundled_infer_model
 import torch
-from lib.infer_libs.rmvpe import RMVPE
-from lib.infer_libs.fcpe import FCPE
+from rvc_inferpy.infer_list.rmvpe import RMVPE
+from rvc_inferpy.infer_list.fcpe import FCPE
 
 @lru_cache
 def cache_harvest_f0(input_audio_path, fs, f0max, f0min, frame_period):
