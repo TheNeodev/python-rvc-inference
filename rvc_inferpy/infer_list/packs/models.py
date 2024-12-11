@@ -10,8 +10,8 @@ from torch.nn import Conv1d, Conv2d, ConvTranspose1d
 from torch.nn import functional as F
 from torch.nn.utils import remove_weight_norm, spectral_norm, weight_norm
 
-from lib.infer_libs.infer_pack import attentions, commons, modules
-from lib.infer_libs.infer_pack.commons import get_padding, init_weights
+from rvc_inferpy.infer_list.packs import attentions, commons, modules
+from rvc_inferpy.infer_list.packs.commons import get_padding, init_weights
 has_xpu = bool(hasattr(torch, "xpu") and torch.xpu.is_available())
 
 class TextEncoder256(nn.Module):
