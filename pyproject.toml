@@ -29,4 +29,4 @@ dependencies = [
 ]
 
 [project.scripts]
-rvc_inferpy = "rvc_inferpy.infer:main"  # Entry point for your package
+rvc-infer = "rvc_inferpy.cli:infer_audio_cli"  # Entry point for CLI
