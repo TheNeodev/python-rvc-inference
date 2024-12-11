@@ -4,7 +4,9 @@ import argparse
 import os
 import shutil
 import gc
-from infer import Configs, VC, get_model, split_silence_nonsilent, adjust_audio_lengths, combine_silence_nonsilent
+from rvc_inferpy.modules import VC
+from rvc_inferpy.infer import Configs, get_model
+from rvc_inferpy.split_audio import split_silence_nonsilent, adjust_audio_lengths, combine_silence_nonsilent
 
 def infer_audio_cli():
     parser = argparse.ArgumentParser(description="Audio inference CLI tool.")
