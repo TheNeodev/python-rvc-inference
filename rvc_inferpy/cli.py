@@ -10,8 +10,8 @@ from rvc_inferpy.split_audio import split_silence_nonsilent, adjust_audio_length
 
 def infer_audio_cli():
     parser = argparse.ArgumentParser(description="Audio inference CLI tool.")
-    parser.add_argument("model_name", type=str, help="Name of the model.")
-    parser.add_argument("audio_path", type=str, help="Path to the input audio file.")
+    parser.add_argument("--model_name", type=str, help="Name of the model.")
+    parser.add_argument("--audio_path", type=str, help="Path to the input audio file.")
     parser.add_argument("--f0_change", type=float, default=0, help="Pitch change factor.")
     parser.add_argument("--f0_method", type=str, default="rmvpe+", help="Method for F0 estimation.")
     parser.add_argument("--min_pitch", type=str, default="50", help="Minimum pitch value.")
