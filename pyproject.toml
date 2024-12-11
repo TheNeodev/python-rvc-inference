@@ -24,7 +24,7 @@ dependencies = [
     "local_attention",            # No version specified
     "torchcrepe==0.0.20",         # Exact version 0.0.20
     "torchfcpe",                  # No version specified
-    "audio-separator[gpu]",       # GPU-optimized package
+    "audio-separator[gpu]==0.25.0",       # GPU-optimized package
     "yt-dlp"                      # No version specified
 ]
 
