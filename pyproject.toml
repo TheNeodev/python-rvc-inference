@@ -9,7 +9,7 @@ description = "Inference tools for RVC"
 readme = "README.md"  # Optional: Add your README
 license = "MIT"       # License type
 authors = [
-    {name = "Hikari Tokanashi", email = ""}
+    {name = "Hikari Tokanashi", email = "theneodevemail@gmail.com"}
 ]
 dependencies = [
     "av",                         # No version specified
