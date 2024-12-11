@@ -75,4 +75,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-For more details, visit the [repository](https://github.com/Vocari/rvc_inferpy.git).
+For more details, visit the [repository](https://github.com/TheNeodev/rvc_inferpy.git).
