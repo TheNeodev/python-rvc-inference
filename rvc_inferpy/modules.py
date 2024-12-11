@@ -8,15 +8,15 @@ import numpy as np
 import soundfile as sf
 import torch
 from io import BytesIO
-from lib.infer_libs.audio import load_audio
-from lib.infer_libs.audio import wav2
-from lib.infer_libs.infer_pack.models import (
+from rvc_inferpy.infer_list.audio import load_audio
+from rvc_inferpy.infer_list.audio import wav2
+from rvc_inferpy.infer_list.packs.models import (
     SynthesizerTrnMs256NSFsid,
     SynthesizerTrnMs256NSFsid_nono,
     SynthesizerTrnMs768NSFsid,
     SynthesizerTrnMs768NSFsid_nono,
 )
-from lib.pipeline import Pipeline
+from rvc_inferpy.pipeline import Pipeline
 import time
 import glob
 from shutil import move
@@ -209,7 +209,7 @@ class VC:
         f0_min,
         f0_max,
         f0_autotune,
-        hubert_model_path = "assets/hubert/hubert_base.pt"
+        hubert_model_path = "hubert_base.pt"
     ):
         """
         Performs inference without saving
