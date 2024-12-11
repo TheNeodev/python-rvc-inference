@@ -41,6 +41,17 @@ inferred_audio = infer_audio(
     OUTPUT_FORMAT="wav"                # Desired output format (e.g., "wav", "mp3")
 )
 ```
+## Usage with cli
+
+you can also use with cli by:
+
+```
+
+rvc-infer -h
+
+
+```
+
 
 ## Parameters
 
