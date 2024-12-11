@@ -3,8 +3,8 @@ import shutil
 import gc
 import torch
 from multiprocessing import cpu_count
-from lib.modules import VC
-from lib.split_audio import split_silence_nonsilent, adjust_audio_lengths, combine_silence_nonsilent
+from rvc_inferpy.modules import VC
+from rvc_inferpy.split_audio import split_silence_nonsilent, adjust_audio_lengths, combine_silence_nonsilent
 
 class Configs:
     def __init__(self, device, is_half):
@@ -121,9 +121,9 @@ def infer_audio(
     f0_autotune=False,
     audio_format="wav",
     resample_sr=0,
-    hubert_model_path="assets/hubert/hubert_base.pt",
-    rmvpe_model_path="assets/rmvpe/rmvpe.pt",
-    fcpe_model_path="assets/fcpe/fcpe.pt"
+    hubert_model_path="hubert_base.pt",
+    rmvpe_model_path="rmvpe.pt",
+    fcpe_model_path="fcpe.pt"
     ):
     os.environ["rmvpe_model_path"] = rmvpe_model_path
     os.environ["fcpe_model_path"] = fcpe_model_path
