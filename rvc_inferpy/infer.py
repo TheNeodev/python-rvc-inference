@@ -180,7 +180,7 @@ def infer_audio(
     pth_path, index_path = get_model(model_name)
     vc_data = vc.get_vc(pth_path, protect, 0.5)
 
-    dl_model()
+    
     
     if split_infer:
         inferred_files = []
