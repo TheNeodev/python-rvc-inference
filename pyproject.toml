@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rvc_inferpy"  # Name of your package
-version = "0.4.2"     # Package version
+version = "0.4.3"     # Package version
 description = "Inference tools for RVC"
 readme = "README.md"  # Optional: Add your README[project]
 license = {text = "MIT"}  # Use this if you are specifying the license directly
@@ -24,7 +24,7 @@ dependencies = [
     "local_attention",            # No version specified
     "torchcrepe==0.0.23",         # Exact version 0.0.20
     "torchfcpe",                  # No version specified
-    "audio-separator==0.25.0",    # GPU-optimized package (corrected version)
+    "audio-separator[gpu]==0.25.0",    # GPU-optimized package (corrected version)
     "yt-dlp",                     # No version specified
     "gradio",                     # No version specified
 ]
