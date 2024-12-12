@@ -1,10 +1,16 @@
-import os
+import os, sys
 import shutil
 import gc
 import torch
 from multiprocessing import cpu_count
 from rvc_inferpy.modules import VC
 from rvc_inferpy.split_audio import split_silence_nonsilent, adjust_audio_lengths, combine_silence_nonsilent
+from pathlib import Path
+import requests
+
+RVC_DOWNLOAD_LINK = "https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/"
+
+
 
 class Configs:
     def __init__(self, device, is_half):
@@ -98,6 +104,50 @@ def get_model(voice_model):
 
     return os.path.join(model_dir, model_filename), os.path.join(model_dir, index_filename) if index_filename else ''
 
+
+
+
+
+
+BASE_DIR = Path(os.getcwd())  # Use Path for better path handling
+sys.path.append(str(BASE_DIR))  # Corrected to use BASE_DIR
+
+files_to_check = ["hubert_base.pt", "rmvpe.pt", "fcpe.pt"]
+
+# Check for missing files
+missing_files = [file for file in files_to_check if not (BASE_DIR / file).exists()]
+
+# Define the download function
+def dl_model(link, model_name, dir_name):
+    url = f"{link}/{model_name}"
+    response = requests.get(url, stream=True)
+    response.raise_for_status()
+
+    target_path = dir_name / model_name
+    target_path.parent.mkdir(parents=True, exist_ok=True)  # Create the directory if it doesn't exist
+
+    with open(target_path, "wb") as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            f.write(chunk)
+
+    print(f"{model_name} downloaded successfully!")
+
+# Download missing files if any
+if missing_files:
+    RVC_DOWNLOAD_LINK = "https://huggingface.co/theNeofr/rvc-base/tree/main/"  # Replace with the actual download link
+
+    for model in missing_files:
+        print(f"Downloading {model}...")
+        dl_model(RVC_DOWNLOAD_LINK, model, BASE_DIR)
+
+    print("All missing models have been downloaded!")
+else:
+    print("All required files are already present.")
+
+
+
+
+
 def infer_audio(
     model_name,
     audio_path,
@@ -131,6 +181,8 @@ def infer_audio(
     vc = VC(configs)
     pth_path, index_path = get_model(model_name)
     vc_data = vc.get_vc(pth_path, protect, 0.5)
+
+    dl_model()
     
     if split_infer:
         inferred_files = []
