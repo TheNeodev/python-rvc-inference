@@ -1,5 +1,9 @@
 # RVC INFER PY 
 
+[![PyPI version](https://badge.fury.io/py/rvc_inferpy.svg)](https://badge.fury.io/py/rvc_inferpy)
+
+
+
 `rvc_inferpy` is a Python library designed for audio inference using RVC (Retrieval-based Voice Conversion). It provides a straightforward interface to process audio files with various configurable parameters.
 
 ## Installation
