@@ -132,7 +132,7 @@ def dl_model(link, model_name, dir_name):
 
 # Download missing files if any
 if missing_files:
-    RVC_DOWNLOAD_LINK = "https://huggingface.co/theNeofr/rvc-base/resolve/main/"  # Replace with the actual download link
+    RVC_DOWNLOAD_LINK = "https://huggingface.co/theNeofr/rvc-base/resolve/main"  # Replace with the actual download link
 
     for model in missing_files:
         print(f"Downloading {model}...")
