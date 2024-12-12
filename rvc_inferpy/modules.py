@@ -377,7 +377,7 @@ class VC:
         f0_min,
         f0_max,
         f0_autotune,
-        hubert_model_path = "assets/hubert/hubert_base.pt"
+        hubert_model_path = "hubert_base.pt"
     ):
         """
         Performs inference with saving
