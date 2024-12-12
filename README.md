@@ -80,10 +80,13 @@ rvc-infer -h
 
 The function returns an audio object with the processed audio based on the provided parameters.
 
+## Credits
+IAHispano's Applio: base of this project
+
+RVC-Project: Original RVC repository
+
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
 
----
-
-For more details, visit the [repository](https://github.com/TheNeodev/rvc_inferpy.git).
