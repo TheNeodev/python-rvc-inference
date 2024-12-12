@@ -80,6 +80,11 @@ rvc-infer -h
 
 The function returns an audio object with the processed audio based on the provided parameters.
 
+
+## Information
+
+you must upload your models in `models/model_name` folder
+
 ## Credits
 IAHispano's Applio: base of this project
 
