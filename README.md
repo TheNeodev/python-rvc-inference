@@ -36,7 +36,6 @@ inferred_audio = infer_audio(
     SILENCE_THRESHOLD=-40,             # Silence threshold in dB
     SEEK_STEP=10,                      # Seek step in milliseconds
     KEEP_SILENCE=0.1,                  # Keep silence duration in seconds
-    FORMANT_SHIFT=0.0,                 # Amount of formant shifting
     QUEFRENCY=0.0,                     # Cepstrum quefrency adjustment
     TIMBRE=1.0,                        # Timbre preservation level
     F0_AUTOTUNE=False,                 # Enable or disable F0 autotuning
@@ -72,7 +71,7 @@ rvc-infer -h
 - **`SILENCE_THRESHOLD`**: Threshold to detect silence (in decibels).
 - **`SEEK_STEP`**: Seek step in milliseconds during splitting.
 - **`KEEP_SILENCE`**: Duration of silence to retain after processing.
-- **`FORMANT_SHIFT`**: Amount of formant shifting applied.
+
 - **`QUEFRENCY`**: Adjusts the quefrency in the cepstrum domain.
 - **`TIMBRE`**: Controls timbre preservation during processing.
 - **`F0_AUTOTUNE`**: Enables or disables F0 autotuning.
