@@ -8,8 +8,6 @@ from rvc_inferpy.split_audio import split_silence_nonsilent, adjust_audio_length
 from pathlib import Path
 import requests
 
-RVC_DOWNLOAD_LINK = "https://huggingface.co/lj1995/VoiceConversionWebUI/resolve/main/"
-
 
 
 class Configs:
@@ -134,7 +132,7 @@ def dl_model(link, model_name, dir_name):
 
 # Download missing files if any
 if missing_files:
-    RVC_DOWNLOAD_LINK = "https://huggingface.co/theNeofr/rvc-base/tree/main/"  # Replace with the actual download link
+    RVC_DOWNLOAD_LINK = "https://huggingface.co/theNeofr/rvc-base/resolve/main/"  # Replace with the actual download link
 
     for model in missing_files:
         print(f"Downloading {model}...")
