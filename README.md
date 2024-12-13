@@ -120,5 +120,5 @@ Ensure that you upload your models in the `models/model_name` folder.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](https://github.com/TheNeodev/rvc_inferpy/tree/main#).
 
