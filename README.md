@@ -33,12 +33,7 @@ rvc-infer -h
 
 
 
-2024-12-13 14:08:46.391624: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
-2024-12-13 14:08:46.416678: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-2024-12-13 14:08:46.424590: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-2024-12-13 14:08:48.022211: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
-2024-12-13 14:08:52 | INFO | fairseq.tasks.text_to_speech | Please install tensorboardX: pip install tensorboardX
-All required files are already present.
+
 usage: rvc-infer [-h] [--model_name MODEL_NAME] [--audio_path AUDIO_PATH] [--f0_change F0_CHANGE]
                  [--f0_method F0_METHOD] [--min_pitch MIN_PITCH] [--max_pitch MAX_PITCH]
                  [--crepe_hop_length CREPE_HOP_LENGTH] [--index_rate INDEX_RATE]
