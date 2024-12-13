@@ -1,5 +1,9 @@
 # RVC INFER PY 
 
+
+*this project still under development*
+
+
 [![PyPI version](https://badge.fury.io/py/rvc-inferpy.svg)](https://badge.fury.io/py/rvc-inferpy)
 
 `rvc_inferpy` is a Python library designed for audio inference using RVC (Retrieval-based Voice Conversion). It provides a straightforward interface to process audio files with various configurable parameters.
@@ -12,7 +16,94 @@ Install the package using pip:
 pip install rvc-inferpy
 ```
 
-## Usage
+
+# Usage
+
+## Command Line Interface (CLI)
+
+
+You can use rvc inferpy via the command line, for example:
+
+```
+rvc-infer -h
+```
+
+
+# Full command-line interface options
+
+
+
+2024-12-13 14:08:46.391624: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2024-12-13 14:08:46.416678: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2024-12-13 14:08:46.424590: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2024-12-13 14:08:48.022211: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+2024-12-13 14:08:52 | INFO | fairseq.tasks.text_to_speech | Please install tensorboardX: pip install tensorboardX
+All required files are already present.
+usage: rvc-infer [-h] [--model_name MODEL_NAME] [--audio_path AUDIO_PATH] [--f0_change F0_CHANGE]
+                 [--f0_method F0_METHOD] [--min_pitch MIN_PITCH] [--max_pitch MAX_PITCH]
+                 [--crepe_hop_length CREPE_HOP_LENGTH] [--index_rate INDEX_RATE]
+                 [--filter_radius FILTER_RADIUS] [--rms_mix_rate RMS_MIX_RATE] [--protect PROTECT]
+                 [--split_infer] [--min_silence MIN_SILENCE]
+                 [--silence_threshold SILENCE_THRESHOLD] [--seek_step SEEK_STEP]
+                 [--keep_silence KEEP_SILENCE] [--do_formant] [--quefrency QUEFRENCY]
+                 [--timbre TIMBRE] [--f0_autotune] [--audio_format AUDIO_FORMAT]
+                 [--resample_sr RESAMPLE_SR] [--hubert_model_path HUBERT_MODEL_PATH]
+                 [--rmvpe_model_path RMVPE_MODEL_PATH] [--fcpe_model_path FCPE_MODEL_PATH]
+
+RVC INFERPY CLI VER.
+
+options:
+  -h, --help            show this help message and exit
+  --model_name MODEL_NAME
+                        Name of the model.
+  --audio_path AUDIO_PATH
+                        Path to the input audio file.
+  --f0_change F0_CHANGE
+                        Pitch change factor.
+  --f0_method F0_METHOD
+                        Method for F0 estimation.
+  --min_pitch MIN_PITCH
+                        Minimum pitch value.
+  --max_pitch MAX_PITCH
+                        Maximum pitch value.
+  --crepe_hop_length CREPE_HOP_LENGTH
+                        Crepe hop length.
+  --index_rate INDEX_RATE
+                        Index rate.
+  --filter_radius FILTER_RADIUS
+                        Filter radius.
+  --rms_mix_rate RMS_MIX_RATE
+                        RMS mix rate.
+  --protect PROTECT     Protect factor.
+  --split_infer         Enable split inference.
+  --min_silence MIN_SILENCE
+                        Minimum silence duration.
+  --silence_threshold SILENCE_THRESHOLD
+                        Silence threshold (dB).
+  --seek_step SEEK_STEP
+                        Seek step for silence detection.
+  --keep_silence KEEP_SILENCE
+                        Silence retention duration.
+  --do_formant          Enable formant processing.
+  --quefrency QUEFRENCY
+                        Quefrency adjustment value.
+  --timbre TIMBRE       Timbre adjustment factor.
+  --f0_autotune         Enable F0 autotuning.
+  --audio_format AUDIO_FORMAT
+                        Output audio format.
+  --resample_sr RESAMPLE_SR
+                        Resample sample rate.
+  --hubert_model_path HUBERT_MODEL_PATH
+                        Path to Hubert model.
+  --rmvpe_model_path RMVPE_MODEL_PATH
+                        Path to RMVPE model.
+  --fcpe_model_path FCPE_MODEL_PATH
+                        Path to FCPE model.
+
+
+
+## As a Dependency in a Python Project
+
 
 Here's a simple example demonstrating how to use the library:
 
@@ -42,40 +133,6 @@ inferred_audio = infer_audio(
     OUTPUT_FORMAT="wav"                # Desired output format (e.g., "wav", "mp3")
 )
 ```
-## Usage with cli
-
-you can also use with cli by:
-
-```
-
-rvc-infer -h
-
-
-```
-
-
-## Parameters
-
-- **`MODEL_NAME`**: Name or path of the RVC model to use.
-- **`SOUND_PATH`**: Path to the input audio file to be processed.
-- **`F0_CHANGE`**: Adjusts the fundamental frequency (F0) of the audio.
-- **`F0_METHOD`**: Method for extracting F0 (e.g., `"crepe"`, `"dio"`).
-- **`MIN_PITCH`** / **`MAX_PITCH`**: Minimum and maximum pitch values for processing.
-- **`CREPE_HOP_LENGTH`**: Hop length parameter for the Crepe method.
-- **`INDEX_RATE`**: Determines the index rate for the inference model.
-- **`FILTER_RADIUS`**: Radius used for smoothing filters.
-- **`RMS_MIX_RATE`**: Mix rate for RMS adjustments.
-- **`PROTECT`**: Protects specific audio characteristics from overfitting.
-- **`SPLIT_INFER`**: Splits the audio for inference if set to `True`.
-- **`MIN_SILENCE`**: Minimum silence duration for splitting audio (in seconds).
-- **`SILENCE_THRESHOLD`**: Threshold to detect silence (in decibels).
-- **`SEEK_STEP`**: Seek step in milliseconds during splitting.
-- **`KEEP_SILENCE`**: Duration of silence to retain after processing.
-
-- **`QUEFRENCY`**: Adjusts the quefrency in the cepstrum domain.
-- **`TIMBRE`**: Controls timbre preservation during processing.
-- **`F0_AUTOTUNE`**: Enables or disables F0 autotuning.
-- **`OUTPUT_FORMAT`**: Specifies the output file format (e.g., `"wav"`, `"mp3"`).
 
 ## Output
 
