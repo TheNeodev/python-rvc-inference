@@ -9,7 +9,7 @@ from rvc_inferpy.infer import Configs, get_model
 from rvc_inferpy.split_audio import split_silence_nonsilent, adjust_audio_lengths, combine_silence_nonsilent
 
 def infer_audio_cli():
-    parser = argparse.ArgumentParser(description="RVCPY CLI version.")
+    parser = argparse.ArgumentParser(description="RVC INFERPY CLI VER.")
     parser.add_argument("--model_name", type=str, help="Name of the model.")
     parser.add_argument("--audio_path", type=str, help="Path to the input audio file.")
     parser.add_argument("--f0_change", type=float, default=0, help="Pitch change factor.")
