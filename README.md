@@ -111,7 +111,7 @@ The `infer_audio` function will return the processed audio object based on the p
 
 ## Model Files
 
-Ensure that you upload your models in the `models/model_name` folder.
+Ensure that you upload your models in the `models/{model_name}` folder.
 
 ## Credits
 
