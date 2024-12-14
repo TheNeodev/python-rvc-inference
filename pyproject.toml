@@ -26,7 +26,7 @@ dependencies = [
     "torchfcpe",                  # No version specified
     "audio-separator[gpu]==0.25.0",    # GPU-optimized package (corrected version)
     "yt-dlp",                     # No version specified
-    "gradio==4.44.0",             # Exact version 4.44.0
+    "gradio",             # Exact version 4.44.0
     "gtts",                       # No version specified
 ]
 
