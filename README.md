@@ -2,7 +2,9 @@
 
 # RVC INFERPY
 
-**Note**: This project is still under development.
+> [!NOTE]
+ > This project is still under development.</a>. 
+
 
 [![PyPI version](https://badge.fury.io/py/rvc-inferpy.svg)](https://badge.fury.io/py/rvc-inferpy)
 
