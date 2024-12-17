@@ -5,6 +5,7 @@
 > [!NOTE]
  > This project is still under development.</a>. 
 
+[![Open In Colab](https://img.shields.io/badge/Colab-F9AB00?style=for-the-badge&logo=googlecolab&color=525252)](https://colab.research.google.com/drive/1Z-DGhti7k_05JiDURIxYRCdDW2x0OVJ8?usp=sharing)
 
 [![PyPI version](https://badge.fury.io/py/rvc-inferpy.svg)](https://badge.fury.io/py/rvc-inferpy)
 
