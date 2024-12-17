@@ -7,37 +7,42 @@ import sys
 import subprocess
 
 platform_stft_mapping = {
-    'linux': os.path.join(os.getcwd(), 'stftpitchshift'),
-    'darwin': os.path.join(os.getcwd(), 'stftpitchshift'),
-    'win32': os.path.join(os.getcwd(), 'stftpitchshift.exe'),
+    "linux": os.path.join(os.getcwd(), "stftpitchshift"),
+    "darwin": os.path.join(os.getcwd(), "stftpitchshift"),
+    "win32": os.path.join(os.getcwd(), "stftpitchshift.exe"),
 }
 
 stft = platform_stft_mapping.get(sys.platform)
 
+
 def wav2(i, o, format):
-    inp = av.open(i, 'rb')
-    if format == "m4a": format = "mp4"
-    out = av.open(o, 'wb', format=format)
-    if format == "ogg": format = "libvorbis"
-    if format == "mp4": format = "aac"
+    inp = av.open(i, "rb")
+    if format == "m4a":
+        format = "mp4"
+    out = av.open(o, "wb", format=format)
+    if format == "ogg":
+        format = "libvorbis"
+    if format == "mp4":
+        format = "aac"
 
     ostream = out.add_stream(format)
 
     for frame in inp.decode(audio=0):
-        for p in ostream.encode(frame): out.mux(p)
+        for p in ostream.encode(frame):
+            out.mux(p)
 
-    for p in ostream.encode(None): out.mux(p)
+    for p in ostream.encode(None):
+        out.mux(p)
 
     out.close()
     inp.close()
+
 
 def load_audio(file, sr, DoFormant=False, Quefrency=1.0, Timbre=1.0):
     formanted = False
     file = file.strip(' \n"')
     if not os.path.exists(file):
-        raise RuntimeError(
-            "Wrong audio path, that does not exist."
-        )
+        raise RuntimeError("Wrong audio path, that does not exist.")
 
     try:
         if DoFormant:
@@ -68,13 +73,14 @@ def load_audio(file, sr, DoFormant=False, Quefrency=1.0, Timbre=1.0):
     except Exception as e:
         raise RuntimeError(f"Failed to load audio: {e}")
 
+
 def check_audio_duration(file):
     try:
         file = file.strip(" ").strip('"').strip("\n").strip('"').strip(" ")
 
         probe = ffmpeg.probe(file)
 
-        duration = float(probe['streams'][0]['duration'])
+        duration = float(probe["streams"][0]["duration"])
 
         if duration < 0.76:
             print(

@@ -2,11 +2,14 @@ import os
 
 import numpy as np
 import torch
+
 try:
-    #Fix "Torch not compiled with CUDA enabled"
-    import intel_extension_for_pytorch as ipex # pylint: disable=import-error, unused-import
+    # Fix "Torch not compiled with CUDA enabled"
+    import intel_extension_for_pytorch as ipex  # pylint: disable=import-error, unused-import
+
     if torch.xpu.is_available():
         from lib.infer.modules.ipex import ipex_init
+
         ipex_init()
 except Exception:
     pass
@@ -98,7 +101,7 @@ class STFT(torch.nn.Module):
         self.window = window
         self.forward_transform = None
         self.pad_amount = int(self.filter_length / 2)
-        #scale = self.filter_length / self.hop_length
+        # scale = self.filter_length / self.hop_length
         fourier_basis = np.fft.fft(np.eye(self.filter_length))
 
         cutoff = int((self.filter_length / 2 + 1))
@@ -106,9 +109,7 @@ class STFT(torch.nn.Module):
             [np.real(fourier_basis[:cutoff, :]), np.imag(fourier_basis[:cutoff, :])]
         )
         forward_basis = torch.FloatTensor(fourier_basis)
-        inverse_basis = torch.FloatTensor(
-            np.linalg.pinv(fourier_basis)
-        )
+        inverse_basis = torch.FloatTensor(np.linalg.pinv(fourier_basis))
 
         assert filter_length >= self.win_length
         # get window and zero center pad it to filter_length
@@ -150,7 +151,9 @@ class STFT(torch.nn.Module):
             mode="reflect",
         )
 
-        forward_transform = input_data.unfold(1, self.filter_length, self.hop_length).permute(0, 2, 1)
+        forward_transform = input_data.unfold(
+            1, self.filter_length, self.hop_length
+        ).permute(0, 2, 1)
         forward_transform = torch.matmul(self.forward_basis, forward_transform)
 
         cutoff = int((self.filter_length / 2) + 1)
@@ -185,13 +188,20 @@ class STFT(torch.nn.Module):
         )
 
         fold = torch.nn.Fold(
-                output_size=(1, (cat.size(-1) - 1) * self.hop_length + self.filter_length), 
-                kernel_size=(1, self.filter_length), 
-                stride=(1, self.hop_length))
+            output_size=(1, (cat.size(-1) - 1) * self.hop_length + self.filter_length),
+            kernel_size=(1, self.filter_length),
+            stride=(1, self.hop_length),
+        )
         inverse_transform = torch.matmul(self.inverse_basis, cat)
-        inverse_transform = fold(inverse_transform)[:, 0, 0, self.pad_amount : -self.pad_amount]
-        window_square_sum = self.fft_window.pow(2).repeat(cat.size(-1), 1).T.unsqueeze(0)
-        window_square_sum = fold(window_square_sum)[:, 0, 0, self.pad_amount : -self.pad_amount]
+        inverse_transform = fold(inverse_transform)[
+            :, 0, 0, self.pad_amount : -self.pad_amount
+        ]
+        window_square_sum = (
+            self.fft_window.pow(2).repeat(cat.size(-1), 1).T.unsqueeze(0)
+        )
+        window_square_sum = fold(window_square_sum)[
+            :, 0, 0, self.pad_amount : -self.pad_amount
+        ]
         inverse_transform /= window_square_sum
 
         return inverse_transform
@@ -528,14 +538,14 @@ class MelSpectrogram(torch.nn.Module):
             magnitude = self.stft.transform(audio)
         else:
             fft = torch.stft(
-                    audio,
-                    n_fft=n_fft_new,
-                    hop_length=hop_length_new,
-                    win_length=win_length_new,
-                    window=self.hann_window[keyshift_key],
-                    center=center,
-                    return_complex=True,
-                    )
+                audio,
+                n_fft=n_fft_new,
+                hop_length=hop_length_new,
+                win_length=win_length_new,
+                window=self.hann_window[keyshift_key],
+                center=center,
+                return_complex=True,
+            )
             magnitude = torch.sqrt(fft.real.pow(2) + fft.imag.pow(2))
         # if (audio.device.type == "privateuseone"):
         #     magnitude=magnitude.to(audio.device)
@@ -589,9 +599,7 @@ class RMVPE:
             n_frames = mel.shape[-1]
             n_pad = 32 * ((n_frames - 1) // 32 + 1) - n_frames
             if n_pad > 0:
-                mel = F.pad(
-                    mel, (0, n_pad), mode="constant"
-                )
+                mel = F.pad(mel, (0, n_pad), mode="constant")
             if "privateuseone" in str(self.device):
                 onnx_input_name = self.model.get_inputs()[0].name
                 onnx_outputs_names = self.model.get_outputs()[0].name
@@ -635,7 +643,7 @@ class RMVPE:
         t3 = ttime()
         # print("hmvpe:%s\t%s\t%s\t%s"%(t1-t0,t2-t1,t3-t2,t3-t0))
         return f0
-    
+
     def infer_from_audio_with_pitch(self, audio, thred=0.03, f0_min=50, f0_max=1100):
         t0 = ttime()
         audio = torch.from_numpy(audio).float().to(self.device).unsqueeze(0)
@@ -650,10 +658,10 @@ class RMVPE:
         if self.is_half == True:
             hidden = hidden.astype("float32")
         f0 = self.decode(hidden, thred=thred)
-        f0[(f0 < f0_min) | (f0 > f0_max)] = 0  
+        f0[(f0 < f0_min) | (f0 > f0_max)] = 0
         t3 = ttime()
         return f0
-    
+
     def to_local_average_cents(self, salience, thred=0.05):
         # t0 = ttime()
         center = np.argmax(salience, axis=1)  # 帧长#index

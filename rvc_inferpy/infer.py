@@ -4,10 +4,13 @@ import gc
 import torch
 from multiprocessing import cpu_count
 from rvc_inferpy.modules import VC
-from rvc_inferpy.split_audio import split_silence_nonsilent, adjust_audio_lengths, combine_silence_nonsilent
+from rvc_inferpy.split_audio import (
+    split_silence_nonsilent,
+    adjust_audio_lengths,
+    combine_silence_nonsilent,
+)
 from pathlib import Path
 import requests
-
 
 
 class Configs:
@@ -54,25 +57,24 @@ class Configs:
 
         return x_pad, x_query, x_center, x_max
 
+
 def get_model(voice_model):
     model_dir = os.path.join(os.getcwd(), "models", voice_model)
     model_filename, index_filename = None, None
     for file in os.listdir(model_dir):
         ext = os.path.splitext(file)[1]
-        if ext == '.pth':
+        if ext == ".pth":
             model_filename = file
-        if ext == '.index':
+        if ext == ".index":
             index_filename = file
 
     if model_filename is None:
-        print(f'No model file exists in {models_dir}.')
+        print(f"No model file exists in {models_dir}.")
         return None, None
 
-    return os.path.join(model_dir, model_filename), os.path.join(model_dir, index_filename) if index_filename else ''
-
-
-
-
+    return os.path.join(model_dir, model_filename), (
+        os.path.join(model_dir, index_filename) if index_filename else ""
+    )
 
 
 BASE_DIR = Path(os.getcwd())  # Use Path for better path handling
@@ -83,6 +85,7 @@ files_to_check = ["hubert_base.pt", "rmvpe.pt", "fcpe.pt"]
 # Check for missing files
 missing_files = [file for file in files_to_check if not (BASE_DIR / file).exists()]
 
+
 # Define the download function
 def dl_model(link, model_name, dir_name):
     url = f"{link}/{model_name}"
@@ -90,13 +93,16 @@ def dl_model(link, model_name, dir_name):
     response.raise_for_status()
 
     target_path = dir_name / model_name
-    target_path.parent.mkdir(parents=True, exist_ok=True)  # Create the directory if it doesn't exist
+    target_path.parent.mkdir(
+        parents=True, exist_ok=True
+    )  # Create the directory if it doesn't exist
 
     with open(target_path, "wb") as f:
         for chunk in response.iter_content(chunk_size=8192):
             f.write(chunk)
 
     print(f"{model_name} downloaded successfully!")
+
 
 # Download missing files if any
 if missing_files:
@@ -109,9 +115,6 @@ if missing_files:
     print("All missing models have been downloaded!")
 else:
     print("All required files are already present.")
-
-
-
 
 
 def infer_audio(
@@ -139,52 +142,57 @@ def infer_audio(
     resample_sr=0,
     hubert_model_path="hubert_base.pt",
     rmvpe_model_path="rmvpe.pt",
-    fcpe_model_path="fcpe.pt"
-    ):
+    fcpe_model_path="fcpe.pt",
+):
     os.environ["rmvpe_model_path"] = rmvpe_model_path
     os.environ["fcpe_model_path"] = fcpe_model_path
-    configs = Configs('cuda:0', True)
+    configs = Configs("cuda:0", True)
     vc = VC(configs)
     pth_path, index_path = get_model(model_name)
     vc_data = vc.get_vc(pth_path, protect, 0.5)
 
-    
-    
     if split_infer:
         inferred_files = []
         temp_dir = os.path.join(os.getcwd(), "seperate", "temp")
         os.makedirs(temp_dir, exist_ok=True)
         print("Splitting audio to silence and nonsilent segments.")
-        silence_files, nonsilent_files = split_silence_nonsilent(audio_path, min_silence, silence_threshold, seek_step, keep_silence)
-        print(f"Total silence segments: {len(silence_files)}.\nTotal nonsilent segments: {len(nonsilent_files)}.")
+        silence_files, nonsilent_files = split_silence_nonsilent(
+            audio_path, min_silence, silence_threshold, seek_step, keep_silence
+        )
+        print(
+            f"Total silence segments: {len(silence_files)}.\nTotal nonsilent segments: {len(nonsilent_files)}."
+        )
         for i, nonsilent_file in enumerate(nonsilent_files):
             print(f"Inferring nonsilent audio {i+1}")
             inference_info, audio_data, output_path = vc.vc_single(
-            0,
-            nonsilent_file,
-            f0_change,
-            f0_method,
-            index_path,
-            index_path,
-            index_rate,
-            filter_radius,
-            resample_sr,
-            rms_mix_rate,
-            protect,
-            audio_format,
-            crepe_hop_length,
-            do_formant,
-            quefrency,
-            timbre,
-            min_pitch,
-            max_pitch,
-            f0_autotune,
-            hubert_model_path
+                0,
+                nonsilent_file,
+                f0_change,
+                f0_method,
+                index_path,
+                index_path,
+                index_rate,
+                filter_radius,
+                resample_sr,
+                rms_mix_rate,
+                protect,
+                audio_format,
+                crepe_hop_length,
+                do_formant,
+                quefrency,
+                timbre,
+                min_pitch,
+                max_pitch,
+                f0_autotune,
+                hubert_model_path,
             )
             if inference_info[0] == "Success.":
                 print("Inference ran successfully.")
                 print(inference_info[1])
-                print("Times:\nnpy: %.2fs f0: %.2fs infer: %.2fs\nTotal time: %.2fs" % (*inference_info[2],))
+                print(
+                    "Times:\nnpy: %.2fs f0: %.2fs infer: %.2fs\nTotal time: %.2fs"
+                    % (*inference_info[2],)
+                )
             else:
                 print(f"An error occurred while processing.\n{inference_info[0]}")
                 return None
@@ -194,11 +202,17 @@ def infer_audio(
         print("Combining silence and inferred audios.")
         output_count = 1
         while True:
-            output_path = os.path.join(os.getcwd(), "output", f"{os.path.splitext(os.path.basename(audio_path))[0]}{model_name}{f0_method.capitalize()}_{output_count}.{audio_format}")
+            output_path = os.path.join(
+                os.getcwd(),
+                "output",
+                f"{os.path.splitext(os.path.basename(audio_path))[0]}{model_name}{f0_method.capitalize()}_{output_count}.{audio_format}",
+            )
             if not os.path.exists(output_path):
                 break
             output_count += 1
-        output_path = combine_silence_nonsilent(silence_files, adjusted_inferred_files, keep_silence, output_path)
+        output_path = combine_silence_nonsilent(
+            silence_files, adjusted_inferred_files, keep_silence, output_path
+        )
         [shutil.move(inferred_file, temp_dir) for inferred_file in inferred_files]
         shutil.rmtree(temp_dir)
     else:
@@ -222,18 +236,21 @@ def infer_audio(
             min_pitch,
             max_pitch,
             f0_autotune,
-            hubert_model_path
+            hubert_model_path,
         )
         if inference_info[0] == "Success.":
             print("Inference ran successfully.")
             print(inference_info[1])
-            print("Times:\nnpy: %.2fs f0: %.2fs infer: %.2fs\nTotal time: %.2fs" % (*inference_info[2],))
+            print(
+                "Times:\nnpy: %.2fs f0: %.2fs infer: %.2fs\nTotal time: %.2fs"
+                % (*inference_info[2],)
+            )
         else:
             print(f"An error occurred while processing.\n{inference_info[0]}")
             del configs, vc
             gc.collect()
             return inference_info[0]
-    
+
     del configs, vc
     gc.collect()
     return output_path

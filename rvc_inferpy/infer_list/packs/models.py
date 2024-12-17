@@ -12,7 +12,9 @@ from torch.nn.utils import remove_weight_norm, spectral_norm, weight_norm
 
 from rvc_inferpy.infer_list.packs import attentions, commons, modules
 from rvc_inferpy.infer_list.packs.commons import get_padding, init_weights
+
 has_xpu = bool(hasattr(torch, "xpu") and torch.xpu.is_available())
+
 
 class TextEncoder256(nn.Module):
     def __init__(
@@ -335,13 +337,17 @@ class SineGen(torch.nn.Module):
                 f0_buf[:, :, idx + 1] = f0_buf[:, :, 0] * (
                     idx + 2
                 )  # idx + 2: the (idx+1)-th overtone, (idx+2)-th harmonic
-            rad_values = (f0_buf / self.sampling_rate) % 1  ###%1意味着n_har的乘积无法后处理优化
+            rad_values = (
+                f0_buf / self.sampling_rate
+            ) % 1  ###%1意味着n_har的乘积无法后处理优化
             rand_ini = torch.rand(
                 f0_buf.shape[0], f0_buf.shape[2], device=f0_buf.device
             )
             rand_ini[:, 0] = 0
             rad_values[:, 0, :] = rad_values[:, 0, :] + rand_ini
-            tmp_over_one = torch.cumsum(rad_values, 1)  # % 1  #####%1意味着后面的cumsum无法再优化
+            tmp_over_one = torch.cumsum(
+                rad_values, 1
+            )  # % 1  #####%1意味着后面的cumsum无法再优化
             tmp_over_one *= upp
             tmp_over_one = F.interpolate(
                 tmp_over_one.transpose(2, 1),
@@ -1157,7 +1163,9 @@ class DiscriminatorP(torch.nn.Module):
         if t % self.period != 0:  # pad first
             n_pad = self.period - (t % self.period)
             if has_xpu and x.dtype == torch.bfloat16:
-                x = F.pad(x.to(dtype=torch.float16), (0, n_pad), "reflect").to(dtype=torch.bfloat16)
+                x = F.pad(x.to(dtype=torch.float16), (0, n_pad), "reflect").to(
+                    dtype=torch.bfloat16
+                )
             else:
                 x = F.pad(x, (0, n_pad), "reflect")
             t = t + n_pad
