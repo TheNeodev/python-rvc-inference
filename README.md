@@ -7,7 +7,7 @@
 
 [![Open In Colab](https://img.shields.io/badge/open%20in-colab-orange?logo=googlecolab
 )](https://colab.research.google.com/drive/1Z-DGhti7k_05JiDURIxYRCdDW2x0OVJ8?usp=sharing)
-[![PyPI version](https://badge.fury.io/py/rvc-inferpy.svg)](https://badge.fury.io/py/rvc-inferpy)
+[![PyPI version](https://badge.fury.io/py/rvc-inferpy.svg)](https://badge.fury.io/py/rvc-inferpy)[![GitHub Stars](https://img.shields.io/github/stars/TheNeodev/rvc_inferpy?style=flat-square&logo=github&label=Star&color=blue)](https://github.com/TheNeodev/rvc_inferpy/stargazers)![GitHub forks](https://img.shields.io/github/forks/TheNeodev/rvc_inferpy?style=social)
 
 `rvc_inferpy` is a Python library for performing audio inference with RVC (Retrieval-based Voice Conversion). It provides a simple command-line interface (CLI) and can be integrated into Python projects for audio processing with customizable parameters.
 
