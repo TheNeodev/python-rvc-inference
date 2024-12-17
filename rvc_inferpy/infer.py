@@ -77,16 +77,14 @@ def get_model(voice_model):
     )
 
 
-BASE_DIR = Path(os.getcwd())  # Use Path for better path handling
-sys.path.append(str(BASE_DIR))  # Corrected to use BASE_DIR
+BASE_DIR = Path(os.getcwd())
+sys.path.append(str(BASE_DIR))
 
 files_to_check = ["hubert_base.pt", "rmvpe.pt", "fcpe.pt"]
 
-# Check for missing files
 missing_files = [file for file in files_to_check if not (BASE_DIR / file).exists()]
 
 
-# Define the download function
 def dl_model(link, model_name, dir_name):
     url = f"{link}/{model_name}"
     response = requests.get(url, stream=True)
@@ -104,7 +102,6 @@ def dl_model(link, model_name, dir_name):
     print(f"{model_name} downloaded successfully!")
 
 
-# Download missing files if any
 if missing_files:
     RVC_DOWNLOAD_LINK = "https://huggingface.co/theNeofr/rvc-base/resolve/main"  # Replace with the actual download link
 
@@ -114,8 +111,7 @@ if missing_files:
 
     print("All missing models have been downloaded!")
 else:
-    print("All required files are already present.")
-
+    pass
 
 def infer_audio(
     model_name,
