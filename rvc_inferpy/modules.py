@@ -1,6 +1,7 @@
 import os, sys
 import traceback
 import logging
+
 now_dir = os.getcwd()
 sys.path.append(now_dir)
 logger = logging.getLogger(__name__)
@@ -38,16 +39,31 @@ sup_audioext = {
     "ac3",
 }
 
+
 def note_to_hz(note_name):
     try:
-        SEMITONES = {'C': -9, 'C#': -8, 'D': -7, 'D#': -6, 'E': -5, 'F': -4, 'F#': -3, 'G': -2, 'G#': -1, 'A': 0, 'A#': 1, 'B': 2}
+        SEMITONES = {
+            "C": -9,
+            "C#": -8,
+            "D": -7,
+            "D#": -6,
+            "E": -5,
+            "F": -4,
+            "F#": -3,
+            "G": -2,
+            "G#": -1,
+            "A": 0,
+            "A#": 1,
+            "B": 2,
+        }
         pitch_class, octave = note_name[:-1], int(note_name[-1])
         semitone = SEMITONES[pitch_class]
         note_number = 12 * (octave - 4) + semitone
-        frequency = 440.0 * (2.0 ** (1.0/12)) ** note_number
+        frequency = 440.0 * (2.0 ** (1.0 / 12)) ** note_number
         return frequency
     except:
         return None
+
 
 def load_hubert(hubert_model_path, config):
     models, _, _ = checkpoint_utils.load_model_ensemble_and_task(
@@ -61,6 +77,7 @@ def load_hubert(hubert_model_path, config):
     else:
         hubert_model = hubert_model.float()
     return hubert_model.eval()
+
 
 class VC:
     def __init__(self, config):
@@ -81,21 +98,23 @@ class VC:
 
         to_return_protect0 = {
             "visible": self.if_f0 != 0,
-            "value": to_return_protect[0]
-            if self.if_f0 != 0 and to_return_protect
-            else 0.5,
+            "value": (
+                to_return_protect[0] if self.if_f0 != 0 and to_return_protect else 0.5
+            ),
             "__type__": "update",
         }
         to_return_protect1 = {
             "visible": self.if_f0 != 0,
-            "value": to_return_protect[1]
-            if self.if_f0 != 0 and to_return_protect
-            else 0.33,
+            "value": (
+                to_return_protect[1] if self.if_f0 != 0 and to_return_protect else 0.33
+            ),
             "__type__": "update",
         }
 
         if sid == "" or sid == []:
-            if self.hubert_model is not None:  # 考虑到轮询, 需要加个判断看是否 sid 是由有模型切换到无模型的
+            if (
+                self.hubert_model is not None
+            ):  # 考虑到轮询, 需要加个判断看是否 sid 是由有模型切换到无模型的
                 logger.info("Clean model cache")
                 del (
                     self.net_g,
@@ -104,9 +123,9 @@ class VC:
                     self.hubert_model,
                     self.tgt_sr,
                 )  # ,cpt
-                self.hubert_model = (
-                    self.net_g
-                ) = self.n_spk = self.vc = self.hubert_model = self.tgt_sr = None
+                self.hubert_model = self.net_g = self.n_spk = self.vc = (
+                    self.hubert_model
+                ) = self.tgt_sr = None
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()
                 ###楼下不这么折腾清理不干净
@@ -144,9 +163,9 @@ class VC:
                 "",
                 "",
             )
-        #person = f'{os.getenv("weight_root")}/{sid}'
-        person = f'{sid}'
-        #logger.info(f"Loading: {person}")
+        # person = f'{os.getenv("weight_root")}/{sid}'
+        person = f"{sid}"
+        # logger.info(f"Loading: {person}")
         logger.info(f"Loading...")
         self.cpt = torch.load(person, map_location="cpu")
         self.tgt_sr = self.cpt["config"][-1]
@@ -176,14 +195,14 @@ class VC:
 
         self.pipeline = Pipeline(self.tgt_sr, self.config)
         n_spk = self.cpt["config"][-3]
-        #index = {"value": get_index_path_from_model(sid), "__type__": "update"}
-        #logger.info("Select index: " + index["value"])
+        # index = {"value": get_index_path_from_model(sid), "__type__": "update"}
+        # logger.info("Select index: " + index["value"])
 
         return (
             (
                 {"visible": False, "maximum": n_spk, "__type__": "update"},
                 to_return_protect0,
-                to_return_protect1
+                to_return_protect1,
             )
             if to_return_protect
             else {"visible": False, "maximum": n_spk, "__type__": "update"}
@@ -209,11 +228,11 @@ class VC:
         f0_min,
         f0_max,
         f0_autotune,
-        hubert_model_path = "hubert_base.pt"
+        hubert_model_path="hubert_base.pt",
     ):
         """
         Performs inference without saving
-    
+
         Parameters:
         - sid (int)
         - input_audio_path1 (str)
@@ -246,13 +265,13 @@ class VC:
         global total_time
         total_time = 0
         start_time = time.time()
-        
+
         if not input_audio_path1:
             return "You need to upload an audio", None
-        
+
         if not os.path.exists(input_audio_path1):
             return "Audio was not properly selected or doesn't exist", None
-        
+
         f0_up_key = int(f0_up_key)
         if not f0_min.isdigit():
             f0_min = note_to_hz(f0_min)
@@ -272,15 +291,17 @@ class VC:
                 print("Invalid maximum pitch note. Defaulting to 1100hz.")
         else:
             f0_max = float(f0_max)
-        
+
         try:
             print(f"Attempting to load {input_audio_path1}....")
-            audio = load_audio(file=input_audio_path1,
-                               sr=16000,
-                               DoFormant=do_formant,
-                               Quefrency=quefrency,
-                               Timbre=timbre)
-            
+            audio = load_audio(
+                file=input_audio_path1,
+                sr=16000,
+                DoFormant=do_formant,
+                Quefrency=quefrency,
+                Timbre=timbre,
+            )
+
             audio_max = np.abs(audio).max() / 0.95
             if audio_max > 1:
                 audio /= audio_max
@@ -295,18 +316,20 @@ class VC:
                 message = "Model was not properly selected"
                 print(message)
                 return message, None
-            
+
             if file_index and not file_index == "" and isinstance(file_index, str):
-                file_index = file_index.strip(" ") \
-                .strip('"') \
-                .strip("\n") \
-                .strip('"') \
-                .strip(" ") \
-                .replace("trained", "added")
+                file_index = (
+                    file_index.strip(" ")
+                    .strip('"')
+                    .strip("\n")
+                    .strip('"')
+                    .strip(" ")
+                    .replace("trained", "added")
+                )
             elif file_index2:
                 file_index = file_index2
             else:
-                file_index = ""  
+                file_index = ""
 
             audio_opt = self.pipeline.pipeline(
                 self.hubert_model,
@@ -329,7 +352,7 @@ class VC:
                 crepe_hop_length,
                 f0_autotune,
                 f0_min=f0_min,
-                f0_max=f0_max                 
+                f0_max=f0_max,
             )
 
             if self.tgt_sr != resample_sr >= 16000:
@@ -351,10 +374,7 @@ class VC:
         except:
             info = traceback.format_exc()
             logger.warn(info)
-            return (
-                (info, None, [None, None, None, None]),
-                (None, None)
-            )
+            return ((info, None, [None, None, None, None]), (None, None))
 
     def vc_single(
         self,
@@ -377,11 +397,11 @@ class VC:
         f0_min,
         f0_max,
         f0_autotune,
-        hubert_model_path = "hubert_base.pt"
+        hubert_model_path="hubert_base.pt",
     ):
         """
         Performs inference with saving
-    
+
         Parameters:
         - sid (int)
         - input_audio_path1 (str)
@@ -416,10 +436,10 @@ class VC:
         global total_time
         total_time = 0
         start_time = time.time()
-        
+
         if not input_audio_path1:
             return "You need to upload an audio", None, None
-        
+
         if not os.path.exists(input_audio_path1):
             return "Audio was not properly selected or doesn't exist", None, None
 
@@ -445,12 +465,14 @@ class VC:
 
         try:
             print(f"Attempting to load {input_audio_path1}...")
-            audio = load_audio(file=input_audio_path1,
-                               sr=16000,
-                               DoFormant=do_formant,
-                               Quefrency=quefrency,
-                               Timbre=timbre)
-            
+            audio = load_audio(
+                file=input_audio_path1,
+                sr=16000,
+                DoFormant=do_formant,
+                Quefrency=quefrency,
+                Timbre=timbre,
+            )
+
             audio_max = np.abs(audio).max() / 0.95
             if audio_max > 1:
                 audio /= audio_max
@@ -466,12 +488,14 @@ class VC:
                 print(message)
                 return message, None
             if file_index and not file_index == "" and isinstance(file_index, str):
-                file_index = file_index.strip(" ") \
-                .strip('"') \
-                .strip("\n") \
-                .strip('"') \
-                .strip(" ") \
-                .replace("trained", "added")
+                file_index = (
+                    file_index.strip(" ")
+                    .strip('"')
+                    .strip("\n")
+                    .strip('"')
+                    .strip(" ")
+                    .replace("trained", "added")
+                )
             elif file_index2:
                 file_index = file_index2
             else:
@@ -498,7 +522,7 @@ class VC:
                 crepe_hop_length,
                 f0_autotune,
                 f0_min=f0_min,
-                f0_max=f0_max                 
+                f0_max=f0_max,
             )
 
             if self.tgt_sr != resample_sr >= 16000:
@@ -510,11 +534,11 @@ class VC:
                 if isinstance(file_index, str) and os.path.exists(file_index)
                 else "Index not used."
             )
-            
+
             opt_root = os.path.join(os.getcwd(), "output")
             os.makedirs(opt_root, exist_ok=True)
             output_count = 1
-            
+
             while True:
                 opt_filename = f"{os.path.splitext(os.path.basename(input_audio_path1))[0]}{os.path.basename(os.path.dirname(file_index))}{f0_method.capitalize()}_{output_count}.{format1}"
                 current_output_path = os.path.join(opt_root, opt_filename)
@@ -530,15 +554,10 @@ class VC:
                     )
                 else:
                     with BytesIO() as wavf:
-                        sf.write(
-                            wavf,
-                            audio_opt,
-                            self.tgt_sr,
-                            format="wav"
-                        )
+                        sf.write(wavf, audio_opt, self.tgt_sr, format="wav")
                         wavf.seek(0, 0)
                         with open(current_output_path, "wb") as outf:
-                                wav2(wavf, outf, format1)
+                            wav2(wavf, outf, format1)
             except:
                 info = traceback.format_exc()
             end_time = time.time()
@@ -547,13 +566,9 @@ class VC:
             return (
                 ("Success.", index_info, times),
                 (tgt_sr, audio_opt),
-                current_output_path
+                current_output_path,
             )
         except:
             info = traceback.format_exc()
             logger.warn(info)
-            return (
-                (info, None, [None, None, None, None]),
-                (None, None),
-                None
-            )
+            return ((info, None, [None, None, None, None]), (None, None), None)
