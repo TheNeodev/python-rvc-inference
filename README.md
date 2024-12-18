@@ -125,7 +125,7 @@ download_online_model("URL_HERE", "model_name")
 ```
 
 > [!NOTE]
- > downloas models only allowed `Huggingface and Pixeldrain` links.</a>
+ > downloas models only allowed `Huggingface, Google Drive, and Pixeldrain` links.</a>
 
 
 > [!TIP]
