@@ -32,7 +32,7 @@ rvc-cli -h
 Here’s a breakdown of the full command-line options:
 
 ```bash
-usage: rvc-infer [-h] [--model_name MODEL_NAME] [--audio_path AUDIO_PATH] 
+usage: rvc-cli [-h] [--model_name MODEL_NAME] [--audio_path AUDIO_PATH] 
                  [--f0_change F0_CHANGE] [--f0_method F0_METHOD] 
                  [--min_pitch MIN_PITCH] [--max_pitch MAX_PITCH] 
                  [--crepe_hop_length CREPE_HOP_LENGTH] [--index_rate INDEX_RATE] 
