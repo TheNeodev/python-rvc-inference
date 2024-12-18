@@ -14,7 +14,7 @@ from rvc_inferpy.split_audio import (
 
 
 def infer_audio_cli():
-    parser = argparse.ArgumentParser(description="RVC CLI.")
+    parser = argparse.ArgumentParser(description="RVC INFERPY CLI VER.")
     parser.add_argument("--model_name", type=str, help="Name of the model.")
     parser.add_argument("--audio_path", type=str, help="Path to the input audio file.")
     parser.add_argument(
@@ -71,9 +71,22 @@ def infer_audio_cli():
     parser.add_argument(
         "--resample_sr", type=int, default=0, help="Resample sample rate."
     )
-
+    parser.add_argument(
+        "--hubert_model_path",
+        type=str,
+        default="hubert_base.pt",
+        help="Path to Hubert model.",
+    )
+    parser.add_argument(
+        "--rmvpe_model_path", type=str, default="rmvpe.pt", help="Path to RMVPE model."
+    )
+    parser.add_argument(
+        "--fcpe_model_path", type=str, default="fcpe.pt", help="Path to FCPE model."
+    )
     args = parser.parse_args()
 
+    os.environ["rmvpe_model_path"] = args.rmvpe_model_path
+    os.environ["fcpe_model_path"] = args.fcpe_model_path
     configs = Configs("cuda:0", True)
     vc = VC(configs)
     pth_path, index_path = get_model(args.model_name)
@@ -113,6 +126,7 @@ def infer_audio_cli():
                 args.min_pitch,
                 args.max_pitch,
                 args.f0_autotune,
+                args.hubert_model_path,
             )
             if inference_info[0] == "Success.":
                 print("Inference ran successfully.")
@@ -148,6 +162,7 @@ def infer_audio_cli():
             args.min_pitch,
             args.max_pitch,
             args.f0_autotune,
+            args.hubert_model_path,
         )
         if inference_info[0] == "Success.":
             print("Inference ran successfully.")

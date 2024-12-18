@@ -33,15 +33,6 @@ from torchfcpe import spawn_bundled_infer_model
 import torch
 from rvc_inferpy.infer_list.rmvpe import RMVPE
 from rvc_inferpy.infer_list.fcpe import FCPE
-from rvc_inferpy.config_loader import *
-
-validate_config_and_files()
-
-BaseLoader(hubert_path=hubert_model_path, rmvpe_path=rmvpe_model_path)
-rvcbasdl = lambda: print(
-    "RVC-based loader initialized."
-)  # Replace with the actual function
-rvcbasdl()
 
 
 @lru_cache
@@ -265,11 +256,11 @@ class Pipeline(object):
 
     def get_rmvpe(self, x, *args, **kwargs):
         if not hasattr(self, "model_rmvpe"):
-            from rvc_inferpy.infer_list.rmvpe import RMVPE
+            from lib.infer.infer_libs.rmvpe import RMVPE
 
             logger.info(f"Loading rmvpe model, {os.environ['rmvpe_model_path']}")
             self.model_rmvpe = RMVPE(
-                rmvpe_model_path,
+                os.environ["rmvpe_model_path"],
                 is_half=self.is_half,
                 device=self.device,
             )
@@ -284,11 +275,11 @@ class Pipeline(object):
 
     def get_pitch_dependant_rmvpe(self, x, f0_min=1, f0_max=40000, *args, **kwargs):
         if not hasattr(self, "model_rmvpe"):
-            from rvc_inferpy.infer_list.rmvpe import RMVPE
+            from lib.infer.infer_libs.rmvpe import RMVPE
 
             logger.info(f"Loading rmvpe model, {os.environ['rmvpe_model_path']}")
             self.model_rmvpe = RMVPE(
-                rmvpe_model_path,
+                os.environ["rmvpe_model_path"],
                 is_half=self.is_half,
                 device=self.device,
             )
@@ -304,7 +295,7 @@ class Pipeline(object):
 
     def get_fcpe(self, x, f0_min, f0_max, p_len, *args, **kwargs):
         self.model_fcpe = FCPE(
-            fcpe_model_path,
+            os.environ["fcpe_model_path"],
             f0_min=f0_min,
             f0_max=f0_max,
             dtype=torch.float32,
@@ -534,11 +525,11 @@ class Pipeline(object):
             )
         elif f0_method == "rmvpe":
             if not hasattr(self, "model_rmvpe"):
-                from rvc_inferpy.infer_list.rmvpe import RMVPE
+                from lib.infer.infer_libs.rmvpe import RMVPE
 
                 logger.info(f"Loading rmvpe model, {os.environ['rmvpe_model_path']}")
                 self.model_rmvpe = RMVPE(
-                    rmvpe_model_path,
+                    os.environ["rmvpe_model_path"],
                     is_half=self.is_half,
                     device=self.device,
                 )
