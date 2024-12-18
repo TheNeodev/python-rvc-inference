@@ -26,7 +26,7 @@ pip install rvc-inferpy
 You can interact with `rvc_inferpy` through the command line. To view the available options and how to use the tool, run:
 
 ```bash
-rvc-infer -h
+rvc-cli -h
 ```
 
 Here’s a breakdown of the full command-line options:
