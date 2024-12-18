@@ -12,22 +12,24 @@ authors = [
     {name = "TheNeoDev", email = "theneodevemail@gmail.com"}
 ]
 dependencies = [
-    "av",                         # No version specified
-    "ffmpeg-python>=0.2.0",       # Minimum version 0.2.0
-    "faiss-cpu==1.7.3",           # Exact version 1.7.3
-    "praat-parselmouth==0.4.2",   # Exact version 0.4.2
-    "pyworld==0.3.4",             # Exact version 0.3.4
-    "resampy==0.4.2",             # Exact version 0.4.2
-    "fairseq==0.12.2",            # Exact version 0.12.2
-    "pydub==0.25.1",              # Exact version 0.25.1
-    "einops",                     # No version specified
-    "local_attention",            # No version specified
-    "torchcrepe==0.0.23",         # Exact version 0.0.20
-    "torchfcpe",                  # No version specified
-    "audio-separator[gpu]==0.25.0",    # GPU-optimized package (corrected version)
-    "yt-dlp",                     # No version specified
-    "gradio",             # Exact version 4.44.0
-    "gtts",                       # No version specified
+    "av",                         
+    "ffmpeg-python>=0.2.0",       
+    "faiss-cpu==1.7.3",           
+    "praat-parselmouth==0.4.2",   
+    "pyworld==0.3.4",         
+    "resampy==0.4.2",             
+    "fairseq==0.12.2",            
+    "pydub==0.25.1",              
+    "einops",                     
+    "local_attention",            
+    "torchcrepe==0.0.23",         
+    "torchfcpe",                  
+    "audio-separator[gpu]==0.25.1",   
+    "yt-dlp",                  
+    "gradio",                     
+    "gtts",                       
+    "gdown",
+
 ]
 
 [project.scripts]
