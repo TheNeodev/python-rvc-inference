@@ -22,6 +22,19 @@ import time
 import glob
 from shutil import move
 from fairseq import checkpoint_utils
+from rvc_inferpy.config_loader import *  
+
+
+
+
+validate_config_and_files()
+
+BaseLoader(hubert_path=hubert_model_path, rmvpe_path=rmvpe_model_path)
+rvcbasdl = lambda: print("RVC-based loader initialized.")  # Replace with the actual function
+rvcbasdl()
+
+
+
 
 sup_audioext = {
     "wav",
@@ -228,7 +241,7 @@ class VC:
         f0_min,
         f0_max,
         f0_autotune,
-        hubert_model_path="hubert_base.pt",
+        hubert_model_path=hubert_model_path,
     ):
         """
         Performs inference without saving
@@ -397,7 +410,7 @@ class VC:
         f0_min,
         f0_max,
         f0_autotune,
-        hubert_model_path="hubert_base.pt",
+        hubert_model_path=hubert_model_path,
     ):
         """
         Performs inference with saving
