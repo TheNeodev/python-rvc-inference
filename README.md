@@ -41,8 +41,7 @@ usage: rvc-infer [-h] [--model_name MODEL_NAME] [--audio_path AUDIO_PATH]
                  [--silence_threshold SILENCE_THRESHOLD] [--seek_step SEEK_STEP] 
                  [--keep_silence KEEP_SILENCE] [--do_formant] [--quefrency QUEFRENCY] 
                  [--timbre TIMBRE] [--f0_autotune] [--audio_format AUDIO_FORMAT] 
-                 [--resample_sr RESAMPLE_SR] [--hubert_model_path HUBERT_MODEL_PATH] 
-                 [--rmvpe_model_path RMVPE_MODEL_PATH] [--fcpe_model_path FCPE_MODEL_PATH]
+                 [--resample_sr RESAMPLE_SR] 
 ```
 
 ### Command-Line Options:
@@ -69,9 +68,7 @@ usage: rvc-infer [-h] [--model_name MODEL_NAME] [--audio_path AUDIO_PATH]
 - `--f0_autotune`: Enable automatic F0 tuning.
 - `--audio_format AUDIO_FORMAT`: Desired output audio format (e.g., "wav", "mp3").
 - `--resample_sr RESAMPLE_SR`: Resample sample rate.
-- `--hubert_model_path HUBERT_MODEL_PATH`: Path to Hubert model.
-- `--rmvpe_model_path RMVPE_MODEL_PATH`: Path to RMVPE model.
-- `--fcpe_model_path FCPE_MODEL_PATH`: Path to FCPE model.
+
 
 ### Example Command:
 
