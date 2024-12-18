@@ -112,6 +112,22 @@ inferred_audio = infer_audio(
 
 The `infer_audio` function will return the processed audio object based on the provided parameters.
 
+## Download Models
+
+you also can download your own rvc models using
+
+```
+
+from rvc_inferpy.downloader import download_online_model
+
+download_online_model("URL_HERE", "model_name")
+
+```
+
+> [!NOTE]
+ > downloas models only allowed Huggingface and Pixeldrain` folder.</a>
+
+
 > [!TIP]
  > Ensure that you upload your models in the `models/{model_name}` folder.</a>
 
