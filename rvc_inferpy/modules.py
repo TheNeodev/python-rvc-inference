@@ -22,18 +22,16 @@ import time
 import glob
 from shutil import move
 from fairseq import checkpoint_utils
-from rvc_inferpy.config_loader import *  
-
-
+from rvc_inferpy.config_loader import *
 
 
 validate_config_and_files()
 
 BaseLoader(hubert_path=hubert_model_path, rmvpe_path=rmvpe_model_path)
-rvcbasdl = lambda: print("RVC-based loader initialized.")  # Replace with the actual function
+rvcbasdl = lambda: print(
+    "RVC-based loader initialized."
+)  # Replace with the actual function
 rvcbasdl()
-
-
 
 
 sup_audioext = {

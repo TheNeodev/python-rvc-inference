@@ -3,7 +3,7 @@ import sys
 import gc
 import traceback
 import logging
-  
+
 logger = logging.getLogger(__name__)
 
 from functools import lru_cache
@@ -38,11 +38,10 @@ from rvc_inferpy.config_loader import *
 validate_config_and_files()
 
 BaseLoader(hubert_path=hubert_model_path, rmvpe_path=rmvpe_model_path)
-rvcbasdl = lambda: print("RVC-based loader initialized.")  # Replace with the actual function
+rvcbasdl = lambda: print(
+    "RVC-based loader initialized."
+)  # Replace with the actual function
 rvcbasdl()
-
-
-
 
 
 @lru_cache
