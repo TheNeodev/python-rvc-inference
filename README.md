@@ -147,6 +147,6 @@ I am not liable for any direct, indirect, consequential, incidental, or special 
 
 ## License
 
-This project is licensed under the [MIT License](https://github.com/TheNeodev/rvc_inferpy/tree/main#).
+This project is licensed under the [MIT License]((https://github.com/TheNeodev/rvc_inferpy/tree/main?tab=MIT-1-ov-file)]).
 
 
