@@ -118,9 +118,9 @@ you also can download your own rvc models using
 
 ```
 
-from rvc_inferpy import download_online_model
+from rvc_inferpy import download_rvc_model dlrvc
 
-download_online_model("URL_HERE", "model_name")
+dlrvc("URL_HERE", "model_name")
 
 ```
 
