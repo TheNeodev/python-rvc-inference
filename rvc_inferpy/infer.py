@@ -85,8 +85,6 @@ def get_model(voice_model):
     )
 
 
-
-
 BASE_DIR = Path(".")
 files_to_check = ["hubert_base.pt", "rmvpe.pt", "fcpe.pt"]
 
@@ -112,7 +110,6 @@ if missing_files:
     print("All missing models have been downloaded!")
 else:
     pass
-
 
 
 def extract_zip(extraction_folder, zip_name):
