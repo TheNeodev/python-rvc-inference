@@ -9,6 +9,7 @@ from rvc_inferpy.split_audio import (
     adjust_audio_lengths,
     combine_silence_nonsilent,
 )
+import torch
 from pathlib import Path
 import requests
 import os
@@ -84,9 +85,9 @@ def get_model(voice_model):
     )
 
 
-BASE_DIR = Path(os.getcwd())
-sys.path.append(str(BASE_DIR))
 
+
+BASE_DIR = Path(".")
 files_to_check = ["hubert_base.pt", "rmvpe.pt", "fcpe.pt"]
 
 missing_files = [file for file in files_to_check if not (BASE_DIR / file).exists()]
@@ -94,18 +95,10 @@ missing_files = [file for file in files_to_check if not (BASE_DIR / file).exists
 
 def dl_model(link, model_name, dir_name):
     url = f"{link}/{model_name}"
-    response = requests.get(url, stream=True)
-    response.raise_for_status()
-
     target_path = dir_name / model_name
-    target_path.parent.mkdir(
-        parents=True, exist_ok=True
-    )  # Create the directory if it doesn't exist
+    target_path.parent.mkdir(parents=True, exist_ok=True)  # Ensure directory exists
 
-    with open(target_path, "wb") as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            f.write(chunk)
-
+    torch.hub.download_url_to_file(url, str(target_path))
     print(f"{model_name} downloaded successfully!")
 
 
@@ -119,6 +112,7 @@ if missing_files:
     print("All missing models have been downloaded!")
 else:
     pass
+
 
 
 def extract_zip(extraction_folder, zip_name):
