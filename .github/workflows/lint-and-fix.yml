@@ -1,0 +1,50 @@
+name: Lint and Auto-Fix
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  lint-and-fix:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+
+      # Step 3: Install dependencies
+      - name: Install Black and Flake8
+        run: |
+          pip install black flake8
+
+      # Step 4: Format code with Black
+      - name: Run Black to format code
+        run: |
+          black .
+      
+      # Step 5: Lint code with Flake8
+      - name: Run Flake8 to lint code
+        run: |
+          flake8 .
+      
+      # Step 6: Commit and push changes
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Auto-format and lint fixes"
+          branch: ${{ github.ref_name }}
+          file_pattern: "**/*.py"
