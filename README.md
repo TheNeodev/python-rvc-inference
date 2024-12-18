@@ -73,7 +73,7 @@ usage: rvc-infer [-h] [--model_name MODEL_NAME] [--audio_path AUDIO_PATH]
 ### Example Command:
 
 ```bash
-rvc-infer --model_name "model_name_here" --audio_path "path_to_audio.wav" --f0_change 0 --f0_method "crepe" --min_pitch 50 --max_pitch 800
+rvc-cli --model_name "model_name_here" --audio_path "path_to_audio.wav" --f0_change 0 --f0_method "crepe" --min_pitch 50 --max_pitch 800
 ```
 
 ### As a Dependency in a Python Project
