@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rvc_inferpy"  # Name of your package
-version = "0.5.6"     # Package version
-description = "Inference tools for RVC"
+version = "0.5.7"     # Package version
+description = "Easy tools for RVC"
 readme = "README.md"  # Optional: Add your README[project]
 license = {text = "MIT"}  # Use this if you are specifying the license directly
 authors = [
@@ -33,7 +33,7 @@ dependencies = [
 ]
 
 [project.scripts]
-rvc-infer = "rvc_inferpy.cli:infer_audio_cli"  # Entry point for CLI
+rvc-cli = "rvc_inferpy.cli:infer_audio_cli"  # Entry point for CLI
 
 [project.optional-dependencies]
 gpu = ["audio-separator[gpu]"]
