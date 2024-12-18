@@ -71,10 +71,9 @@ def infer_audio_cli():
     parser.add_argument(
         "--resample_sr", type=int, default=0, help="Resample sample rate."
     )
-    
+
     args = parser.parse_args()
 
-    
     configs = Configs("cuda:0", True)
     vc = VC(configs)
     pth_path, index_path = get_model(args.model_name)
@@ -113,7 +112,7 @@ def infer_audio_cli():
                 args.timbre,
                 args.min_pitch,
                 args.max_pitch,
-                args.f0_autotune,                
+                args.f0_autotune,
             )
             if inference_info[0] == "Success.":
                 print("Inference ran successfully.")
