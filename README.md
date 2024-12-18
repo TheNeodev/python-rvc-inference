@@ -112,9 +112,10 @@ inferred_audio = infer_audio(
 
 The `infer_audio` function will return the processed audio object based on the provided parameters.
 
-## Model Files
+> [!TIP]
+ > Ensure that you upload your models in the `models/{model_name}` folder.</a>
 
-Ensure that you upload your models in the `models/{model_name}` folder.
+
 
 
 
