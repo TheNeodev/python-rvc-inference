@@ -9,7 +9,7 @@ from rvc_inferpy.split_audio import (
     adjust_audio_lengths,
     combine_silence_nonsilent,
 )
-from rvc_inferpy.config_loader import *  
+from rvc_inferpy.config_loader import *
 import torch
 from pathlib import Path
 import requests
@@ -22,15 +22,13 @@ import gdown
 models_dir = "models"
 
 
-
 validate_config_and_files()
 
 BaseLoader(hubert_path=hubert_model_path, rmvpe_path=rmvpe_model_path)
-rvcbasdl = lambda: print("RVC-based loader initialized.")  # Replace with the actual function
+rvcbasdl = lambda: print(
+    "RVC-based loader initialized."
+)  # Replace with the actual function
 rvcbasdl()
-
-
-
 
 
 class Configs:
@@ -97,11 +95,6 @@ def get_model(voice_model):
     )
 
 
-
-
-
-
-
 def infer_audio(
     model_name,
     audio_path,
@@ -129,7 +122,7 @@ def infer_audio(
     rmvpe_model_path=rmvpe_model_path,
     fcpe_model_path=fcpe_model_path,
 ):
-    
+
     configs = Configs("cuda:0", True)
     vc = VC(configs)
     pth_path, index_path = get_model(model_name)
