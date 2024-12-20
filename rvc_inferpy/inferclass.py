@@ -1,5 +1,6 @@
 from rvc_inferpy.infer import infer_audio
 
+
 class Infer:
     def __init__(
         self,
