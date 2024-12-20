@@ -107,7 +107,24 @@ inferred_audio = infer_audio(
 )
 ```
 
-The `infer_audio` function will return the processed audio object based on the provided parameters.
+The `infer_audio` function will return the processed audio object based on the provided parameters
+
+
+## you can also use this new inference mode
+from rvc_inferpy import infernew
+
+
+
+
+infer = infernew(
+    model_name="model_name_here",
+    sound_path="path_to_audio.wav",
+    f0_change=0
+)
+
+output_audio = infer.run_inference()
+print("Inference completed:", output_audio)
+
 
 ## Download Models
 
