@@ -111,9 +111,9 @@ The `infer_audio` function will return the processed audio object based on the p
 
 
 ## you can also use this new inference mode
+
+```
 from rvc_inferpy import infernew
-
-
 
 
 infer = infernew(
@@ -125,7 +125,7 @@ infer = infernew(
 output_audio = infer.run_inference()
 print("Inference completed:", output_audio)
 
-
+```
 ## Download Models
 
 you also can download your own rvc models using
