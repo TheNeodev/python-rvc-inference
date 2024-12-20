@@ -1,4 +1,4 @@
-from rvc_inferpy import infer_audio
+from rvc_inferpy.infer import infer_audio
 
 class Infer:
     def __init__(
