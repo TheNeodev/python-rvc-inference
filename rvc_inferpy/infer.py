@@ -253,8 +253,6 @@ def infer_audio(
     return output_path
 
 
-
-
 class infernew:
     def __init__(
         self,
