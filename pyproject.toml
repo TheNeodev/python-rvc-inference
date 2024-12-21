@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rvc_inferpy"  # Name of your package
-version = "0.5.7"     # Package version
+version = "0.5.8"     # Package version
 description = "Easy tools for RVC"
 readme = "README.md"  # Optional: Add your README[project]
 license = {text = "MIT"}  # Use this if you are specifying the license directly
