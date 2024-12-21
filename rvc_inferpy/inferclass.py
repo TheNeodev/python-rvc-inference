@@ -1,7 +1,7 @@
 from rvc_inferpy.infer import infer_audio
 
 
-class Infer:
+class infernew:
     def __init__(
         self,
         model_name,
