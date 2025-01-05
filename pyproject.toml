@@ -24,7 +24,7 @@ dependencies = [
     "local_attention",            
     "torchcrepe==0.0.23",         
     "torchfcpe",                  
-    "audio-separator[gpu]==v0.28.5",   
+    "audio-separator[gpu]==0.28.5",   
     "yt-dlp",                  
     "gradio==4.44.0",                     
     "gtts",
