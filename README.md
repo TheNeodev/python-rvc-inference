@@ -84,26 +84,24 @@ You can also use `rvc_inferpy` directly in your Python projects. Here's an examp
 from rvc_inferpy import infer_audio
 
 inferred_audio = infer_audio(
-    MODEL_NAME="model_name_here",       # Name or path to the RVC model
-    SOUND_PATH="path_to_audio.wav",     # Path to the input audio file
-    F0_CHANGE=0,                        # Change in fundamental frequency
-    F0_METHOD="crepe",                  # F0 extraction method ("crepe", "dio", etc.)
-    MIN_PITCH=50,                       # Minimum pitch value
-    MAX_PITCH=800,                      # Maximum pitch value
-    CREPE_HOP_LENGTH=128,               # Hop length for Crepe
-    INDEX_RATE=1.0,                     # Index rate for model inference
-    FILTER_RADIUS=3,                    # Radius for smoothing filters
-    RMS_MIX_RATE=0.75,                  # Mixing rate for RMS
-    PROTECT=0.33,                       # Protect level to prevent overfitting
-    SPLIT_INFER=True,                   # Whether to split audio for inference
-    MIN_SILENCE=0.5,                    # Minimum silence duration for splitting
-    SILENCE_THRESHOLD=-40,              # Silence threshold in dB
-    SEEK_STEP=10,                       # Seek step in milliseconds
-    KEEP_SILENCE=0.1,                   # Keep silence duration in seconds
-    QUEFRENCY=0.0,                      # Cepstrum quefrency adjustment
-    TIMBRE=1.0,                         # Timbre preservation level
-    F0_AUTOTUNE=False,                  # Enable or disable F0 autotuning
-    OUTPUT_FORMAT="wav"                 # Desired output format (e.g., "wav", "mp3")
+    model_name="model_name_here",       # Name or path to the RVC model
+    audio_path="path_to_audio.wav",     # Path to the input audio file
+    f0_change=0,                        # Change in fundamental frequency
+    f0_method="crepe",                  # F0 extraction method ("crepe", "dio", etc.) 
+    crepe_hop_length=128,               # Hop length for Crepe
+    index_rate=1.0,                     # Index rate for model inference
+    filter_radius=3,                    # Radius for smoothing filters
+    rms_mix_rate=0.75,                  # Mixing rate for RMS
+    protect=0.33,                       # Protect level to prevent overfitting
+    split_infer=True,                   # Whether to split audio for inference
+    min_silence=0.5,                    # Minimum silence duration for splitting
+    silence_threshold=-40,              # Silence threshold in dB
+    seek_step=10,                       # Seek step in milliseconds
+    keep_silence=0.1,                   # Keep silence duration in seconds
+    quefrency=0.0,                      # Cepstrum quefrency adjustment
+    tumbre=1.0,                         # Timbre preservation level
+    f0_autotune=False,                  # Enable or disable F0 autotuning
+    
 )
 ```
 
