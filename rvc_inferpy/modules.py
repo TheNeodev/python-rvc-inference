@@ -21,7 +21,6 @@ from rvc_inferpy.pipeline import Pipeline
 import time
 import glob
 from shutil import move
-from fairseq import checkpoint_utils
 
 sup_audioext = {
     "wav",
@@ -66,6 +65,7 @@ def note_to_hz(note_name):
 
 
 def load_hubert(hubert_model_path, config):
+    from fairseq import checkpoint_utils
     models, _, _ = checkpoint_utils.load_model_ensemble_and_task(
         [hubert_model_path],
         suffix="",
