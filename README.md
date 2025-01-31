@@ -1,6 +1,4 @@
-
-
-# RVC INFERPY
+# python RVC inference
 
 > [!NOTE]
  > This project is still under development.</a>.
