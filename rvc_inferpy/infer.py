@@ -80,38 +80,7 @@ def get_model(voice_model):
 BASE_DIR = Path(os.getcwd())
 sys.path.append(str(BASE_DIR))
 
-files_to_check = ["hubert_base.pt", "rmvpe.pt", "fcpe.pt"]
 
-missing_files = [file for file in files_to_check if not (BASE_DIR / file).exists()]
-
-
-def dl_model(link, model_name, dir_name):
-    url = f"{link}/{model_name}"
-    response = requests.get(url, stream=True)
-    response.raise_for_status()
-
-    target_path = dir_name / model_name
-    target_path.parent.mkdir(
-        parents=True, exist_ok=True
-    )  # Create the directory if it doesn't exist
-
-    with open(target_path, "wb") as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            f.write(chunk)
-
-    print(f"{model_name} downloaded successfully!")
-
-
-if missing_files:
-    RVC_DOWNLOAD_LINK = "https://huggingface.co/theNeofr/rvc-base/resolve/main"  # Replace with the actual download link
-
-    for model in missing_files:
-        print(f"Downloading {model}...")
-        dl_model(RVC_DOWNLOAD_LINK, model, BASE_DIR)
-
-    print("All missing models have been downloaded!")
-else:
-    pass
 
 
 def infer_audio(
@@ -253,72 +222,3 @@ def infer_audio(
     return output_path
 
 
-class infernew:
-    def __init__(
-        self,
-        model_name,
-        sound_path,
-        f0_change=0,
-        f0_method="rmvpe",
-        min_pitch=50,
-        max_pitch=800,
-        crepe_hop_length=128,
-        index_rate=1.0,
-        filter_radius=3,
-        rms_mix_rate=0.75,
-        protect=0.33,
-        split_infer=True,
-        min_silence=0.5,
-        silence_threshold=-40,
-        seek_step=10,
-        keep_silence=0.1,
-        quefrency=0.0,
-        timbre=1.0,
-        f0_autotune=False,
-        output_format="wav",
-    ):
-        self.model_name = model_name
-        self.sound_path = sound_path
-        self.f0_change = f0_change
-        self.f0_method = f0_method
-        self.min_pitch = min_pitch
-        self.max_pitch = max_pitch
-        self.crepe_hop_length = crepe_hop_length
-        self.index_rate = index_rate
-        self.filter_radius = filter_radius
-        self.rms_mix_rate = rms_mix_rate
-        self.protect = protect
-        self.split_infer = split_infer
-        self.min_silence = min_silence
-        self.silence_threshold = silence_threshold
-        self.seek_step = seek_step
-        self.keep_silence = keep_silence
-        self.quefrency = quefrency
-        self.timbre = timbre
-        self.f0_autotune = f0_autotune
-        self.output_format = output_format
-
-    def run_inference(self):
-        inferred_audio = infer_audio(
-            MODEL_NAME=self.model_name,
-            SOUND_PATH=self.sound_path,
-            F0_CHANGE=self.f0_change,
-            F0_METHOD=self.f0_method,
-            MIN_PITCH=self.min_pitch,
-            MAX_PITCH=self.max_pitch,
-            CREPE_HOP_LENGTH=self.crepe_hop_length,
-            INDEX_RATE=self.index_rate,
-            FILTER_RADIUS=self.filter_radius,
-            RMS_MIX_RATE=self.rms_mix_rate,
-            PROTECT=self.protect,
-            SPLIT_INFER=self.split_infer,
-            MIN_SILENCE=self.min_silence,
-            SILENCE_THRESHOLD=self.silence_threshold,
-            SEEK_STEP=self.seek_step,
-            KEEP_SILENCE=self.keep_silence,
-            QUEFRENCY=self.quefrency,
-            TIMBRE=self.timbre,
-            F0_AUTOTUNE=self.f0_autotune,
-            OUTPUT_FORMAT=self.output_format,
-        )
-        return inferred_audio
