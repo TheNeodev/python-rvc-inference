@@ -22,6 +22,92 @@ import time
 import glob
 from shutil import move
 
+
+
+BASE_DOWNLOAD_LINK = "https://huggingface.co/theNeofr/rvc-base/resolve/main"
+BASE_MODELS = [
+    "hubert_base.pt",
+    "rmvpe.pt",
+    "fcpe.pt"
+]
+BASE_DIR = "."
+
+
+def load_file_from_url(
+    url: str,
+    model_dir: str,
+    file_name: str | None = None,
+    overwrite: bool = False,
+    progress: bool = True,
+) -> str:
+    """Download a file from `url` into `model_dir`,
+    using the file present if possible.
+
+    Returns the path to the downloaded file.
+    """
+    os.makedirs(model_dir, exist_ok=True)
+    if not file_name:
+        parts = urlparse(url)
+        file_name = os.path.basename(parts.path)
+    cached_file = os.path.abspath(os.path.join(model_dir, file_name))
+
+    # Overwrite
+    if os.path.exists(cached_file):
+        if overwrite or os.path.getsize(cached_file) == 0:
+            os.remove(cached_file)
+
+    # Download
+    if not os.path.exists(cached_file):
+        logger.info(f'Downloading: "{url}" to {cached_file}\n')
+        from torch.hub import download_url_to_file
+
+        download_url_to_file(url, cached_file, progress=progress)
+    else:
+        logger.debug(cached_file)
+
+    return cached_file
+
+
+def friendly_name(file: str):
+    if file.startswith("http"):
+        file = urlparse(file).path
+
+    file = os.path.basename(file)
+    model_name, extension = os.path.splitext(file)
+    return model_name, extension
+
+
+def download_manager(
+    url: str,
+    path: str,
+    extension: str = "",
+    overwrite: bool = False,
+    progress: bool = True,
+):
+    url = url.strip()
+
+    name, ext = friendly_name(url)
+    name += ext if not extension else f".{extension}"
+
+    if url.startswith("http"):
+        filename = load_file_from_url(
+            url=url,
+            model_dir=path,
+            file_name=name,
+            overwrite=overwrite,
+            progress=progress,
+        )
+    else:
+        filename = path
+
+    return filename
+
+
+
+
+
+
+
 sup_audioext = {
     "wav",
     "mp3",
@@ -64,11 +150,25 @@ def note_to_hz(note_name):
         return None
 
 
-def load_hubert(hubert_model_path, config):
+        filename = path
+
+    return filename
+
+
+def load_hubert(config, hubert_path=None):
     from fairseq import checkpoint_utils
 
+    if hubert_path is None:
+        hubert_path = ""
+    if not os.path.exists(hubert_path):
+        for id_model in BASE_MODELS:
+            download_manager(
+                os.path.join(BASE_DOWNLOAD_LINK, id_model), BASE_DIR
+            )
+        hubert_path = "hubert_base.pt"
+
     models, _, _ = checkpoint_utils.load_model_ensemble_and_task(
-        [hubert_model_path],
+        [hubert_path],
         suffix="",
     )
     hubert_model = models[0]
@@ -77,8 +177,9 @@ def load_hubert(hubert_model_path, config):
         hubert_model = hubert_model.half()
     else:
         hubert_model = hubert_model.float()
-    return hubert_model.eval()
+    hubert_model.eval()
 
+    return hubert_model
 
 class VC:
     def __init__(self, config):
