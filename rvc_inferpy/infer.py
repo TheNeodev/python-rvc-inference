@@ -81,8 +81,6 @@ BASE_DIR = Path(os.getcwd())
 sys.path.append(str(BASE_DIR))
 
 
-
-
 def infer_audio(
     model_name,
     audio_path,
@@ -220,5 +218,3 @@ def infer_audio(
     del configs, vc
     gc.collect()
     return output_path
-
-
