@@ -23,13 +23,8 @@ import glob
 from shutil import move
 
 
-
 BASE_DOWNLOAD_LINK = "https://huggingface.co/theNeofr/rvc-base/resolve/main"
-BASE_MODELS = [
-    "hubert_base.pt",
-    "rmvpe.pt",
-    "fcpe.pt"
-]
+BASE_MODELS = ["hubert_base.pt", "rmvpe.pt", "fcpe.pt"]
 BASE_DIR = "."
 
 
@@ -103,11 +98,6 @@ def download_manager(
     return filename
 
 
-
-
-
-
-
 sup_audioext = {
     "wav",
     "mp3",
@@ -149,7 +139,6 @@ def note_to_hz(note_name):
     except:
         return None
 
-
         filename = path
 
     return filename
@@ -162,9 +151,7 @@ def load_hubert(config, hubert_path=None):
         hubert_path = ""
     if not os.path.exists(hubert_path):
         for id_model in BASE_MODELS:
-            download_manager(
-                os.path.join(BASE_DOWNLOAD_LINK, id_model), BASE_DIR
-            )
+            download_manager(os.path.join(BASE_DOWNLOAD_LINK, id_model), BASE_DIR)
         hubert_path = "hubert_base.pt"
 
     models, _, _ = checkpoint_utils.load_model_ensemble_and_task(
@@ -180,6 +167,7 @@ def load_hubert(config, hubert_path=None):
     hubert_model.eval()
 
     return hubert_model
+
 
 class VC:
     def __init__(self, config):
