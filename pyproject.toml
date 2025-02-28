@@ -18,6 +18,7 @@ dependencies = [
     "praat-parselmouth==0.4.2",   
     "pyworld==0.3.4", 
     "librosa",
+    "tqdm",
     "resampy==0.4.2",             
     "fairseq==0.12.2",            
     "pydub==0.25.1",              
