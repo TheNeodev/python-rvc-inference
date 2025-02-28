@@ -162,9 +162,6 @@ def note_to_hz(note_name: str) -> float | None:
         return None
 
 
-
-
-
 def load_hubert(config, hubert_path: str = None):
     """
     Load and return the HuBERT model using torchaudio.
@@ -180,7 +177,7 @@ def load_hubert(config, hubert_path: str = None):
     hubert_model = hubert_model.to(config.device)
     hubert_model = hubert_model.half() if config.is_half else hubert_model.float()
     hubert_model.eval()
-    
+
     return hubert_model
 
 
