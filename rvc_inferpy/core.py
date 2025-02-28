@@ -55,6 +55,7 @@ BASE_DOWNLOAD_LINK = "https://huggingface.co/theNeofr/rvc-base/resolve/main"
 BASE_MODELS = ["hubert_base.pt", "rmvpe.pt", "fcpe.pt"]
 BASE_DIR = "."
 
+
 # -----------------------------------------------------------------------------
 # Helper Functions
 # -----------------------------------------------------------------------------
@@ -119,7 +120,11 @@ def download_manager(
         name += ext
     if url.startswith("http"):
         filename = load_file_from_url(
-            url=url, model_dir=path, file_name=name, overwrite=overwrite, progress=progress
+            url=url,
+            model_dir=path,
+            file_name=name,
+            overwrite=overwrite,
+            progress=progress,
         )
     else:
         filename = path
@@ -131,8 +136,18 @@ def note_to_hz(note_name: str) -> float | None:
     Convert a musical note (e.g., 'A4') to its frequency in Hz.
     """
     SEMITONES = {
-        "C": -9, "C#": -8, "D": -7, "D#": -6, "E": -5,
-        "F": -4, "F#": -3, "G": -2, "G#": -1, "A": 0, "A#": 1, "B": 2,
+        "C": -9,
+        "C#": -8,
+        "D": -7,
+        "D#": -6,
+        "E": -5,
+        "F": -4,
+        "F#": -3,
+        "G": -2,
+        "G#": -1,
+        "A": 0,
+        "A#": 1,
+        "B": 2,
     }
     try:
         pitch_class = note_name[:-1]
@@ -157,7 +172,9 @@ def load_hubert(config, hubert_path: str = None):
         for model_file in BASE_MODELS:
             download_manager(os.path.join(BASE_DOWNLOAD_LINK, model_file), BASE_DIR)
         hubert_path = "hubert_base.pt"
-    models, _, _ = checkpoint_utils.load_model_ensemble_and_task([hubert_path], suffix="")
+    models, _, _ = checkpoint_utils.load_model_ensemble_and_task(
+        [hubert_path], suffix=""
+    )
     hubert_model = models[0].to(config.device)
     hubert_model = hubert_model.half() if config.is_half else hubert_model.float()
     hubert_model.eval()
@@ -174,6 +191,7 @@ class BaseEiser:
     This class encapsulates device configuration and other environment settings.
     It is intended as the base class for initializing your package configuration.
     """
+
     def __init__(self, device: str = "cuda:0", is_half: bool = True):
         self.device = device
         self.is_half = is_half
@@ -212,6 +230,7 @@ class VC:
     """
     Voice Conversion (VC) class to handle model loading and inference.
     """
+
     def __init__(self, config: BaseEiser):
         self.config = config
         self.n_spk = None
@@ -238,8 +257,18 @@ class VC:
                 self._clear_model_cache()
             return (
                 {"visible": False, "__type__": "update"},
-                {"visible": True, "value": to_return_protect[0] if to_return_protect else 0.5, "__type__": "update"},
-                {"visible": True, "value": to_return_protect[1] if len(to_return_protect) > 1 else 0.33, "__type__": "update"},
+                {
+                    "visible": True,
+                    "value": to_return_protect[0] if to_return_protect else 0.5,
+                    "__type__": "update",
+                },
+                {
+                    "visible": True,
+                    "value": (
+                        to_return_protect[1] if len(to_return_protect) > 1 else 0.33
+                    ),
+                    "__type__": "update",
+                },
                 "",
                 "",
             )
@@ -251,7 +280,9 @@ class VC:
             return ({"visible": False, "__type__": "update"}, "", "", "", "")
 
         self.tgt_sr = self.cpt["config"][-1]
-        self.cpt["config"][-3] = self.cpt["weight"]["emb_g.weight"].shape[0]  # Number of speakers
+        self.cpt["config"][-3] = self.cpt["weight"]["emb_g.weight"].shape[
+            0
+        ]  # Number of speakers
         self.if_f0 = self.cpt.get("f0", 1)
         self.version = self.cpt.get("version", "v1")
 
@@ -261,7 +292,9 @@ class VC:
             ("v2", 1): SynthesizerTrnMs768NSFsid,
             ("v2", 0): SynthesizerTrnMs768NSFsid_nono,
         }
-        synth_class = synthesizer_class.get((self.version, self.if_f0), SynthesizerTrnMs256NSFsid)
+        synth_class = synthesizer_class.get(
+            (self.version, self.if_f0), SynthesizerTrnMs256NSFsid
+        )
         self.net_g = synth_class(*self.cpt["config"], is_half=self.config.is_half)
         del self.net_g.enc_q
         self.net_g.load_state_dict(self.cpt["weight"], strict=False)
@@ -273,8 +306,18 @@ class VC:
         if to_return_protect:
             update_info = (
                 update_info,
-                {"visible": True, "value": to_return_protect[0] if to_return_protect else 0.5, "__type__": "update"},
-                {"visible": True, "value": to_return_protect[1] if len(to_return_protect) > 1 else 0.33, "__type__": "update"},
+                {
+                    "visible": True,
+                    "value": to_return_protect[0] if to_return_protect else 0.5,
+                    "__type__": "update",
+                },
+                {
+                    "visible": True,
+                    "value": (
+                        to_return_protect[1] if len(to_return_protect) > 1 else 0.33
+                    ),
+                    "__type__": "update",
+                },
             )
         return update_info
 
@@ -293,7 +336,9 @@ class VC:
                 logger.info(f"Converted pitch '{pitch}' to {converted} Hz.")
                 return converted
             else:
-                logger.warning(f"Invalid pitch note '{pitch}'. Defaulting to {default} Hz.")
+                logger.warning(
+                    f"Invalid pitch note '{pitch}'. Defaulting to {default} Hz."
+                )
                 return default
         try:
             return float(pitch)
@@ -316,9 +361,23 @@ class VC:
         return audio
 
     def _run_inference(
-        self, sid, audio, input_audio_path, times, f0_up_key, f0_method,
-        file_index, index_rate, filter_radius, resample_sr, rms_mix_rate,
-        protect, crepe_hop_length, f0_autotune, f0_min, f0_max
+        self,
+        sid,
+        audio,
+        input_audio_path,
+        times,
+        f0_up_key,
+        f0_method,
+        file_index,
+        index_rate,
+        filter_radius,
+        resample_sr,
+        rms_mix_rate,
+        protect,
+        crepe_hop_length,
+        f0_autotune,
+        f0_min,
+        f0_max,
     ):
         """Run the inference pipeline and return the output audio."""
         return self.pipeline.pipeline(
@@ -383,7 +442,9 @@ class VC:
         f0_max_val = self._parse_pitch(f0_max, 1100)
 
         try:
-            audio = self._load_audio_and_normalize(input_audio_path, do_formant, quefrency, timbre)
+            audio = self._load_audio_and_normalize(
+                input_audio_path, do_formant, quefrency, timbre
+            )
             times = [0, 0, 0]
             if self.hubert_model is None:
                 self.hubert_model = load_hubert(self.config, hubert_model_path)
@@ -400,14 +461,31 @@ class VC:
                 else file_index2 or ""
             )
             audio_opt = self._run_inference(
-                sid, audio, input_audio_path, times, f0_up_key, f0_method,
-                file_index_final, index_rate, filter_radius, resample_sr,
-                rms_mix_rate, protect, crepe_hop_length, f0_autotune,
-                f0_min_val, f0_max_val,
+                sid,
+                audio,
+                input_audio_path,
+                times,
+                f0_up_key,
+                f0_method,
+                file_index_final,
+                index_rate,
+                filter_radius,
+                resample_sr,
+                rms_mix_rate,
+                protect,
+                crepe_hop_length,
+                f0_autotune,
+                f0_min_val,
+                f0_max_val,
             )
-            tgt_sr = resample_sr if (self.tgt_sr != resample_sr and resample_sr >= 16000) else self.tgt_sr
+            tgt_sr = (
+                resample_sr
+                if (self.tgt_sr != resample_sr and resample_sr >= 16000)
+                else self.tgt_sr
+            )
             index_info = (
-                f"Index: {file_index_final}." if file_index_final and os.path.exists(file_index_final)
+                f"Index: {file_index_final}."
+                if file_index_final and os.path.exists(file_index_final)
                 else "Index not used."
             )
             times.append(time.time() - start_time)
@@ -437,7 +515,11 @@ class VC:
                 logger.error("Error saving audio: " + str(e))
 
             times.append(time.time() - start_time)
-            return ("Success.", index_info, times), (tgt_sr, audio_opt), current_output_path
+            return (
+                ("Success.", index_info, times),
+                (tgt_sr, audio_opt),
+                current_output_path,
+            )
         except Exception as e:
             info = traceback.format_exc()
             logger.warning(info)
@@ -467,7 +549,7 @@ class VC:
     ):
         """
         Perform inference without saving output audio.
-        
+
         Returns a tuple:
           (status_info, (sample_rate, audio_data))
         """
@@ -480,7 +562,9 @@ class VC:
         f0_max_val = self._parse_pitch(f0_max, 1100)
 
         try:
-            audio = self._load_audio_and_normalize(input_audio_path, do_formant, quefrency, timbre)
+            audio = self._load_audio_and_normalize(
+                input_audio_path, do_formant, quefrency, timbre
+            )
             times = [0, 0, 0]
             if self.hubert_model is None:
                 self.hubert_model = load_hubert(self.config, hubert_model_path)
@@ -497,14 +581,31 @@ class VC:
                 else file_index2 or ""
             )
             audio_opt = self._run_inference(
-                sid, audio, input_audio_path, times, f0_up_key, f0_method,
-                file_index_final, index_rate, filter_radius, resample_sr,
-                rms_mix_rate, protect, crepe_hop_length, f0_autotune,
-                f0_min_val, f0_max_val,
+                sid,
+                audio,
+                input_audio_path,
+                times,
+                f0_up_key,
+                f0_method,
+                file_index_final,
+                index_rate,
+                filter_radius,
+                resample_sr,
+                rms_mix_rate,
+                protect,
+                crepe_hop_length,
+                f0_autotune,
+                f0_min_val,
+                f0_max_val,
             )
-            tgt_sr = resample_sr if (self.tgt_sr != resample_sr and resample_sr >= 16000) else self.tgt_sr
+            tgt_sr = (
+                resample_sr
+                if (self.tgt_sr != resample_sr and resample_sr >= 16000)
+                else self.tgt_sr
+            )
             index_info = (
-                f"Index: {file_index_final}." if file_index_final and os.path.exists(file_index_final)
+                f"Index: {file_index_final}."
+                if file_index_final and os.path.exists(file_index_final)
                 else "Index not used."
             )
             times.append(time.time() - start_time)
@@ -576,7 +677,7 @@ def infer_audio(
 ):
     """
     Main function to perform voice conversion inference on an audio file.
-    
+
     Optionally splits the audio into segments (using silence detection), processes each,
     and then combines the results.
     """
@@ -595,7 +696,9 @@ def infer_audio(
         silence_files, nonsilent_files = split_silence_nonsilent(
             audio_path, min_silence, silence_threshold, seek_step, keep_silence
         )
-        logger.info(f"Silence segments: {len(silence_files)}; Nonsilent segments: {len(nonsilent_files)}.")
+        logger.info(
+            f"Silence segments: {len(silence_files)}; Nonsilent segments: {len(nonsilent_files)}."
+        )
 
         for i, nonsilent_file in enumerate(nonsilent_files):
             logger.info(f"Inferring nonsilent segment {i+1}.")
@@ -644,7 +747,9 @@ def infer_audio(
             if not os.path.exists(output_path):
                 break
             output_count += 1
-        output_path = combine_silence_nonsilent(silence_files, adjusted_inferred_files, keep_silence, output_path)
+        output_path = combine_silence_nonsilent(
+            silence_files, adjusted_inferred_files, keep_silence, output_path
+        )
         for inferred_file in inferred_files:
             shutil.move(inferred_file, temp_dir)
         shutil.rmtree(temp_dir)
@@ -687,5 +792,3 @@ def infer_audio(
     del config, vc
     gc.collect()
     return output_path
-
-
